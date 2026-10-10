@@ -10,12 +10,12 @@ Open work, newest decisions first. Each training item needs the user's go-ahead 
       placeholder Unitree policy in `g1_controller`. This is the controller the real G1 runs; ULTRA's released
       teacher (`g1-whole-body-rl/ultra_eval/`) can serve as an extra expert for motion tracking. Includes the optional
       base-height command (needed by VLA planners such as UnifoLM-WLA and GR00T, which command `height`).
-  - [ ] Stage A teacher: stand and stabilise (≈ 7 h on the 3070) — awaiting go-ahead
-  - [ ] Stage B teacher: velocity locomotion + upper-body targets (≈ 26 h) — awaiting go-ahead
+  - [ ] Stage A teacher: stand and stabilise (about 7 h on the RTX 3070), awaiting go-ahead
+  - [ ] Stage B teacher: velocity locomotion + upper-body targets (about 26 h), awaiting go-ahead
   - [ ] Student distillation + ONNX export + battery (≈ 3 h per stage)
   - [ ] Decide: stronger standing energy/torque penalty for long standing in theatre
-  - [ ] Stage C (ULTRA motion tracking) — data already in `datasets/ultra/`
-- [ ] **Instrument detector** (`hospital-sim-perception/`): 20k synthetic frames (≈ 5 h) + YOLO11n-OBB (≈ 9 h) — awaiting go-ahead
+  - [ ] Stage C (ULTRA motion tracking): data already in `datasets/ultra/`
+- [ ] Instrument detector (separate private repository): 20k synthetic frames (about 5 h) and YOLO11n-OBB training (about 9 h), awaiting go-ahead
 - [ ] **UnifoLM-WLA evaluation** (see `docs/architecture.md`): fine-tune / LoRA the action expert on our
       G1 + BrainCo data on a ≥ 24 GB GPU; extend Unitree's model server to the whole-body + dexterous-hand
       (WBT, `fig6d`) action space; add a `wla_bridge` ROS 2 node.

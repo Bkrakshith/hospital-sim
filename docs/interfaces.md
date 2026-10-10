@@ -1,4 +1,4 @@
-# Hospital_G1 — G1 teleoperation stack: layout and interface contract
+# hospital-sim: layout and interface contract of the G1 teleoperation stack
 
 This file is the contract every part of the build codes against. Change it only
 deliberately, and update every consumer when you do.
@@ -26,7 +26,7 @@ topics as the real robot, so the stack can later point at the real G1).
 | `g1-webcam-teleop/xr_teleoperate/` | g1-webcam-teleop | fork of unitreerobotics/xr_teleoperate with webcam hand/arm tracking input |
 | `g1-webcam-teleop/obsbot/` | g1-webcam-teleop | OBSBOT Tiny 3 gimbal control + hand-following auto-framing |
 | `hospital-sim-ui/` | hospital-sim-ui | web dashboard (SLAM, navigation, teleoperation) |
-| `hospital-sim-perception/` | hospital-sim-perception | instrument detector: synthetic data generation, training, weights (docs/TODO.md) |
+| (not in this assembly) | private | instrument detector training. The stack does not depend on it: `g1_perception` runs in `gt` mode in simulation and takes any YOLO-OBB ONNX export through its `model` parameter |
 | `docs/` | hospital-sim (master) | design docs, this contract |
 | `env.sh` | hospital-sim (master) | `source env.sh` = clean LD path + ROS 2 Humble + `.venv` + ros2_ws overlay |
 
@@ -53,7 +53,7 @@ OBSBOT Tiny 3 is on USB (`3564:ff02`, `/dev/video0`).
 15 left_shoulder_pitch 16 left_shoulder_roll 17 left_shoulder_yaw 18 left_elbow 19 left_wrist_roll 20 left_wrist_pitch 21 left_wrist_yaw
 22 right_shoulder_pitch ... 28 right_wrist_yaw   (same order as left)
 ```
-Joint names in URDF/MJCF are `<name>_joint` (e.g. `left_hip_pitch_joint`). Actuators 0–28
+Joint names in URDF/MJCF are `<name>_joint` (for example `left_hip_pitch_joint`). Actuators 0 to 28
 follow this order in every MJCF. **qpos order:** `g1_29dof_brainco_fixedhands.xml` has
 `qpos[7:36]` in this order; the full `g1_29dof_brainco.xml` follows the kinematic tree, so the
 left-hand joints sit between `left_wrist_yaw` and `right_shoulder_pitch`. Never slice
@@ -79,7 +79,7 @@ Commands are **normalised 0 (open) .. 1 (closed)**.
 
 ### 3.1 Topics
 
-Low level (identical names/types to the real G1 via unitree_ros2 / CycloneDDS):
+Low level (identical names/types to the real G1 through unitree_ros2 / CycloneDDS):
 
 | Topic | Type | Pub → Sub | Rate |
 |---|---|---|---|

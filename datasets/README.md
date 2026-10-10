@@ -1,6 +1,7 @@
 # datasets/
 
-Recorded data (not source code). Large folders are git-ignored.
+This folder holds recorded data, not source code. Git ignores the large folders. The table below
+lists the folders and their contents.
 
 | Folder | What |
 |---|---|
