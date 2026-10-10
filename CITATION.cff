@@ -1,0 +1,11 @@
+cff-version: 1.2.0
+message: "If you use this work or build on it, cite it as below and keep the NOTICE file."
+title: "hospital-sim: Master repository of a humanoid robot stack in a simulated hospital"
+type: software
+authors:
+  - alias: Bkrakshith
+    website: "https://github.com/Bkrakshith"
+repository-code: "https://github.com/Bkrakshith/hospital-sim"
+url: "https://github.com/Bkrakshith/hospital-sim"
+license: Apache-2.0
+date-released: 2026-10-10

@@ -279,3 +279,11 @@ Machine notes for the development workstation are at the end of `docs/interfaces
 The stack runs end to end in both simulators with a placeholder locomotion policy. The whole-body
 policy is not trained yet. The instrument detector is not part of this assembly. Nothing has run on a
 physical robot.
+
+## License
+
+The license of this repository is the Apache License, Version 2.0 (see `LICENSE`).
+You can use, change and share this work, also for commercial use.
+If you share this work or a work that you built on it, keep the `NOTICE` file.
+Give this credit in your documentation and product credits: "Based on hospital-sim by Bkrakshith (https://github.com/Bkrakshith/hospital-sim)".
+To cite this work in a publication, use `CITATION.cff`.
