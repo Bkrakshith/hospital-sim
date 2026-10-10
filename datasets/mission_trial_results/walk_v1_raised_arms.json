@@ -1,0 +1,73 @@
+{
+ "goto": "failed",
+ "goto_message": "GoTo(theatre_instrument_table): Nav2 goal ended with status 6",
+ "log": [
+  {
+   "wall": 0.3,
+   "sim_t": 16.0,
+   "state": "running",
+   "step": "ToReady",
+   "msg": "goto:theatre_instrument_table started",
+   "mode": "AUTO",
+   "pose": [
+    8.953,
+    -12.504,
+    0.777,
+    0.082
+   ],
+   "fall": false,
+   "station_error": [
+    15.791,
+    -9.233,
+    -95.7
+   ]
+  },
+  {
+   "wall": 3.3,
+   "sim_t": 19.0,
+   "state": "running",
+   "step": "GoTo(theatre_instrument_table)",
+   "msg": "goto:theatre_instrument_table started",
+   "mode": "AUTO",
+   "pose": [
+    8.625,
+    -12.48,
+    0.778,
+    0.072
+   ],
+   "fall": false,
+   "station_error": [
+    16.141,
+    -9.231,
+    -95.5
+   ]
+  },
+  {
+   "wall": 45.6,
+   "sim_t": 61.0,
+   "state": "failed",
+   "step": "",
+   "msg": "GoTo(theatre_instrument_table): Nav2 goal ended with status 6",
+   "mode": "STAND",
+   "pose": [
+    6.123,
+    -13.309,
+    0.772,
+    0.055
+   ],
+   "fall": false,
+   "station_error": [
+    19.057,
+    -7.87,
+    -93.1
+   ]
+  }
+ ],
+ "final_pose": [
+  6.123367711684257,
+  -13.308837712692734,
+  0.7723381794163403,
+  0.05512247968270643
+ ],
+ "fall": false
+}

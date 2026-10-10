@@ -1,0 +1,20 @@
+# hospital-sim master repository. Component repos carry their own .gitignore.
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+*.egg-info/
+# colcon workspace output (ros2_ws/src/hospital-sim-ros2 is a submodule)
+ros2_ws/build/
+ros2_ws/install/
+ros2_ws/log/
+# recorded data lives on Hugging Face, see datasets/README.md
+datasets/lerobot_*/
+datasets/ultra/
+datasets/slam_survey/
+# large renders
+media/**/*.mp4
+media/**/*.mkv
+
+# private component kept out of the public assembly, see README
+hospital-sim-perception/

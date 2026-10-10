@@ -1,0 +1,548 @@
+{
+ "summary": {
+  "scalpel_handle": {
+   "success": 10,
+   "trials": 10
+  },
+  "needle_driver": {
+   "success": 10,
+   "trials": 10
+  },
+  "forceps": {
+   "success": 10,
+   "trials": 10
+  },
+  "scissors": {
+   "success": 10,
+   "trials": 10
+  }
+ },
+ "offset_range": [
+  0.02,
+  0.02,
+  0.08
+ ],
+ "seed": 7,
+ "results": [
+  {
+   "instrument": "scalpel_handle",
+   "success": true,
+   "duration": 20.7,
+   "message": "handed over",
+   "offset": [
+    0.005,
+    0.0159,
+    0.0441
+   ],
+   "wall": 24.0,
+   "rtf": 1.0
+  },
+  {
+   "instrument": "scalpel_handle",
+   "success": true,
+   "duration": 20.9,
+   "message": "handed over",
+   "offset": [
+    -0.011,
+    -0.008,
+    0.0598
+   ],
+   "wall": 21.1,
+   "rtf": 1.001
+  },
+  {
+   "instrument": "scalpel_handle",
+   "success": true,
+   "duration": 20.6,
+   "message": "handed over",
+   "offset": [
+    -0.0198,
+    0.0128,
+    0.0475
+   ],
+   "wall": 20.7,
+   "rtf": 1.0
+  },
+  {
+   "instrument": "scalpel_handle",
+   "success": true,
+   "duration": 20.5,
+   "message": "handed over",
+   "offset": [
+    -0.0013,
+    -0.0079,
+    -0.0355
+   ],
+   "wall": 20.7,
+   "rtf": 1.0
+  },
+  {
+   "instrument": "scalpel_handle",
+   "success": true,
+   "duration": 20.4,
+   "message": "handed over",
+   "offset": [
+    -0.0098,
+    -0.0022,
+    0.0007
+   ],
+   "wall": 20.5,
+   "rtf": 1.0
+  },
+  {
+   "instrument": "scalpel_handle",
+   "success": true,
+   "duration": 20.6,
+   "message": "handed over",
+   "offset": [
+    0.0021,
+    0.0198,
+    0.0468
+   ],
+   "wall": 20.8,
+   "rtf": 1.0
+  },
+  {
+   "instrument": "scalpel_handle",
+   "success": true,
+   "duration": 20.6,
+   "message": "handed over",
+   "offset": [
+    0.0049,
+    0.0196,
+    -0.0456
+   ],
+   "wall": 20.7,
+   "rtf": 1.0
+  },
+  {
+   "instrument": "scalpel_handle",
+   "success": true,
+   "duration": 20.7,
+   "message": "handed over",
+   "offset": [
+    -0.0136,
+    0.0045,
+    -0.073
+   ],
+   "wall": 20.7,
+   "rtf": 1.0
+  },
+  {
+   "instrument": "scalpel_handle",
+   "success": true,
+   "duration": 20.6,
+   "message": "handed over",
+   "offset": [
+    -0.0186,
+    0.0006,
+    -0.0054
+   ],
+   "wall": 20.8,
+   "rtf": 1.0
+  },
+  {
+   "instrument": "scalpel_handle",
+   "success": true,
+   "duration": 20.6,
+   "message": "handed over",
+   "offset": [
+    0.0167,
+    0.0052,
+    0.0023
+   ],
+   "wall": 20.7,
+   "rtf": 1.001
+  },
+  {
+   "instrument": "needle_driver",
+   "success": true,
+   "duration": 20.5,
+   "message": "handed over",
+   "offset": [
+    -0.0001,
+    -0.0101,
+    -0.0781
+   ],
+   "wall": 20.6,
+   "rtf": 0.999
+  },
+  {
+   "instrument": "needle_driver",
+   "success": true,
+   "duration": 20.3,
+   "message": "handed over",
+   "offset": [
+    -0.0123,
+    0.0077,
+    -0.0479
+   ],
+   "wall": 20.5,
+   "rtf": 1.002
+  },
+  {
+   "instrument": "needle_driver",
+   "success": true,
+   "duration": 20.2,
+   "message": "handed over",
+   "offset": [
+    -0.0052,
+    -0.0199,
+    0.0528
+   ],
+   "wall": 20.5,
+   "rtf": 1.0
+  },
+  {
+   "instrument": "needle_driver",
+   "success": true,
+   "duration": 20.2,
+   "message": "handed over",
+   "offset": [
+    -0.0138,
+    -0.0093,
+    0.0609
+   ],
+   "wall": 20.3,
+   "rtf": 1.0
+  },
+  {
+   "instrument": "needle_driver",
+   "success": true,
+   "duration": 20.6,
+   "message": "handed over",
+   "offset": [
+    0.0004,
+    0.0139,
+    0.0224
+   ],
+   "wall": 20.7,
+   "rtf": 0.998
+  },
+  {
+   "instrument": "needle_driver",
+   "success": true,
+   "duration": 20.3,
+   "message": "handed over",
+   "offset": [
+    0.0097,
+    -0.0163,
+    0.0066
+   ],
+   "wall": 20.4,
+   "rtf": 1.0
+  },
+  {
+   "instrument": "needle_driver",
+   "success": true,
+   "duration": 20.5,
+   "message": "handed over",
+   "offset": [
+    0.0003,
+    0.0149,
+    -0.0222
+   ],
+   "wall": 20.8,
+   "rtf": 1.0
+  },
+  {
+   "instrument": "needle_driver",
+   "success": true,
+   "duration": 20.4,
+   "message": "handed over",
+   "offset": [
+    0.0039,
+    -0.0176,
+    -0.018
+   ],
+   "wall": 20.7,
+   "rtf": 1.0
+  },
+  {
+   "instrument": "needle_driver",
+   "success": true,
+   "duration": 20.2,
+   "message": "handed over",
+   "offset": [
+    -0.0071,
+    -0.014,
+    0.0506
+   ],
+   "wall": 20.2,
+   "rtf": 1.001
+  },
+  {
+   "instrument": "needle_driver",
+   "success": true,
+   "duration": 20.4,
+   "message": "handed over",
+   "offset": [
+    -0.0048,
+    0.0191,
+    0.0144
+   ],
+   "wall": 20.6,
+   "rtf": 1.0
+  },
+  {
+   "instrument": "forceps",
+   "success": true,
+   "duration": 20.8,
+   "message": "handed over",
+   "offset": [
+    0.0042,
+    0.0055,
+    0.0282
+   ],
+   "wall": 20.9,
+   "rtf": 1.0
+  },
+  {
+   "instrument": "forceps",
+   "success": true,
+   "duration": 21.0,
+   "message": "handed over",
+   "offset": [
+    -0.014,
+    -0.0024,
+    -0.0417
+   ],
+   "wall": 21.1,
+   "rtf": 1.001
+  },
+  {
+   "instrument": "forceps",
+   "success": true,
+   "duration": 21.0,
+   "message": "handed over",
+   "offset": [
+    -0.0039,
+    -0.0161,
+    0.0749
+   ],
+   "wall": 21.2,
+   "rtf": 1.001
+  },
+  {
+   "instrument": "forceps",
+   "success": true,
+   "duration": 20.9,
+   "message": "handed over",
+   "offset": [
+    -0.0114,
+    0.0069,
+    -0.0319
+   ],
+   "wall": 21.3,
+   "rtf": 1.0
+  },
+  {
+   "instrument": "forceps",
+   "success": true,
+   "duration": 21.1,
+   "message": "handed over",
+   "offset": [
+    0.015,
+    0.0065,
+    -0.0589
+   ],
+   "wall": 21.3,
+   "rtf": 1.0
+  },
+  {
+   "instrument": "forceps",
+   "success": true,
+   "duration": 20.7,
+   "message": "handed over",
+   "offset": [
+    0.0138,
+    0.0178,
+    0.0646
+   ],
+   "wall": 21.0,
+   "rtf": 1.0
+  },
+  {
+   "instrument": "forceps",
+   "success": true,
+   "duration": 21.0,
+   "message": "handed over",
+   "offset": [
+    0.0028,
+    -0.0142,
+    -0.0492
+   ],
+   "wall": 21.2,
+   "rtf": 1.001
+  },
+  {
+   "instrument": "forceps",
+   "success": true,
+   "duration": 21.0,
+   "message": "handed over",
+   "offset": [
+    0.0171,
+    0.0021,
+    -0.0511
+   ],
+   "wall": 21.4,
+   "rtf": 0.998
+  },
+  {
+   "instrument": "forceps",
+   "success": true,
+   "duration": 20.9,
+   "message": "handed over",
+   "offset": [
+    0.0154,
+    0.0057,
+    0.0112
+   ],
+   "wall": 21.1,
+   "rtf": 1.0
+  },
+  {
+   "instrument": "forceps",
+   "success": true,
+   "duration": 21.0,
+   "message": "handed over",
+   "offset": [
+    -0.0049,
+    -0.0036,
+    -0.0417
+   ],
+   "wall": 21.1,
+   "rtf": 1.001
+  },
+  {
+   "instrument": "scissors",
+   "success": true,
+   "duration": 21.4,
+   "message": "handed over",
+   "offset": [
+    -0.0185,
+    0.015,
+    -0.0052
+   ],
+   "wall": 21.5,
+   "rtf": 1.0
+  },
+  {
+   "instrument": "scissors",
+   "success": true,
+   "duration": 21.2,
+   "message": "handed over",
+   "offset": [
+    0.0019,
+    -0.0071,
+    0.0402
+   ],
+   "wall": 21.4,
+   "rtf": 1.0
+  },
+  {
+   "instrument": "scissors",
+   "success": true,
+   "duration": 21.8,
+   "message": "handed over",
+   "offset": [
+    -0.019,
+    -0.0051,
+    -0.0751
+   ],
+   "wall": 21.9,
+   "rtf": 0.998
+  },
+  {
+   "instrument": "scissors",
+   "success": true,
+   "duration": 22.1,
+   "message": "handed over",
+   "offset": [
+    -0.0151,
+    0.0187,
+    0.0252
+   ],
+   "wall": 22.1,
+   "rtf": 0.969
+  },
+  {
+   "instrument": "scissors",
+   "success": true,
+   "duration": 21.2,
+   "message": "handed over",
+   "offset": [
+    -0.0029,
+    0.0009,
+    0.0596
+   ],
+   "wall": 21.5,
+   "rtf": 1.0
+  },
+  {
+   "instrument": "scissors",
+   "success": true,
+   "duration": 21.1,
+   "message": "handed over",
+   "offset": [
+    -0.0062,
+    0.0036,
+    0.0294
+   ],
+   "wall": 21.4,
+   "rtf": 1.0
+  },
+  {
+   "instrument": "scissors",
+   "success": true,
+   "duration": 21.3,
+   "message": "handed over",
+   "offset": [
+    -0.0058,
+    0.0008,
+    0.0424
+   ],
+   "wall": 21.4,
+   "rtf": 1.0
+  },
+  {
+   "instrument": "scissors",
+   "success": true,
+   "duration": 21.1,
+   "message": "handed over",
+   "offset": [
+    0.0164,
+    -0.014,
+    0.0693
+   ],
+   "wall": 21.1,
+   "rtf": 1.0
+  },
+  {
+   "instrument": "scissors",
+   "success": true,
+   "duration": 21.7,
+   "message": "handed over",
+   "offset": [
+    -0.0198,
+    0.0101,
+    0.0497
+   ],
+   "wall": 21.7,
+   "rtf": 1.0
+  },
+  {
+   "instrument": "scissors",
+   "success": true,
+   "duration": 21.1,
+   "message": "handed over",
+   "offset": [
+    -0.0145,
+    -0.0032,
+    0.0504
+   ],
+   "wall": 21.3,
+   "rtf": 0.999
+  }
+ ]
+}

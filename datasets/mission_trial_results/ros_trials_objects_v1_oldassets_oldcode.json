@@ -1,0 +1,280 @@
+{
+ "summary": {
+  "scalpel_handle": {
+   "success": 8,
+   "trials": 10
+  },
+  "scissors": {
+   "success": 10,
+   "trials": 10
+  }
+ },
+ "offset_range": [
+  0.02,
+  0.02,
+  0.08
+ ],
+ "seed": 11,
+ "results": [
+  {
+   "instrument": "scalpel_handle",
+   "success": true,
+   "duration": 44.1,
+   "message": "handed over",
+   "offset": [
+    -0.0149,
+    -0.0,
+    0.0162
+   ],
+   "wall": 44.3,
+   "rtf": 1.0
+  },
+  {
+   "instrument": "scalpel_handle",
+   "success": false,
+   "duration": 41.8,
+   "message": "Handover: surgeon did not take the instrument",
+   "offset": [
+    -0.0189,
+    -0.0141,
+    0.0685
+   ],
+   "wall": 41.9,
+   "rtf": 0.997
+  },
+  {
+   "instrument": "scalpel_handle",
+   "success": true,
+   "duration": 44.0,
+   "message": "handed over",
+   "offset": [
+    -0.0172,
+    -0.0148,
+    0.0717
+   ],
+   "wall": 56.1,
+   "rtf": 1.002
+  },
+  {
+   "instrument": "scalpel_handle",
+   "success": true,
+   "duration": 43.6,
+   "message": "handed over",
+   "offset": [
+    0.0049,
+    -0.0052,
+    0.0018
+   ],
+   "wall": 43.9,
+   "rtf": 1.001
+  },
+  {
+   "instrument": "scalpel_handle",
+   "success": true,
+   "duration": 43.6,
+   "message": "handed over",
+   "offset": [
+    0.0065,
+    -0.009,
+    -0.0579
+   ],
+   "wall": 44.0,
+   "rtf": 0.94
+  },
+  {
+   "instrument": "scalpel_handle",
+   "success": true,
+   "duration": 44.6,
+   "message": "handed over",
+   "offset": [
+    0.0115,
+    0.0068,
+    0.002
+   ],
+   "wall": 44.9,
+   "rtf": 1.001
+  },
+  {
+   "instrument": "scalpel_handle",
+   "success": true,
+   "duration": 44.7,
+   "message": "handed over",
+   "offset": [
+    0.0127,
+    0.002,
+    0.0769
+   ],
+   "wall": 45.5,
+   "rtf": 1.0
+  },
+  {
+   "instrument": "scalpel_handle",
+   "success": true,
+   "duration": 44.6,
+   "message": "handed over",
+   "offset": [
+    -0.0118,
+    0.0021,
+    -0.0026
+   ],
+   "wall": 44.8,
+   "rtf": 1.0
+  },
+  {
+   "instrument": "scalpel_handle",
+   "success": true,
+   "duration": 44.7,
+   "message": "handed over",
+   "offset": [
+    -0.0059,
+    0.0037,
+    -0.0424
+   ],
+   "wall": 45.2,
+   "rtf": 1.0
+  },
+  {
+   "instrument": "scalpel_handle",
+   "success": false,
+   "duration": 41.2,
+   "message": "Handover: surgeon did not take the instrument",
+   "offset": [
+    0.0121,
+    0.0147,
+    -0.0594
+   ],
+   "wall": 41.4,
+   "rtf": 0.999
+  },
+  {
+   "instrument": "scissors",
+   "success": true,
+   "duration": 45.0,
+   "message": "handed over",
+   "offset": [
+    -0.0013,
+    -0.0089,
+    -0.0667
+   ],
+   "wall": 57.3,
+   "rtf": 1.0
+  },
+  {
+   "instrument": "scissors",
+   "success": true,
+   "duration": 44.8,
+   "message": "handed over",
+   "offset": [
+    0.0158,
+    -0.0028,
+    -0.0564
+   ],
+   "wall": 45.0,
+   "rtf": 1.0
+  },
+  {
+   "instrument": "scissors",
+   "success": true,
+   "duration": 44.7,
+   "message": "handed over",
+   "offset": [
+    0.0069,
+    -0.0119,
+    0.0642
+   ],
+   "wall": 44.9,
+   "rtf": 1.0
+  },
+  {
+   "instrument": "scissors",
+   "success": true,
+   "duration": 44.8,
+   "message": "handed over",
+   "offset": [
+    -0.0113,
+    -0.0187,
+    -0.0479
+   ],
+   "wall": 45.0,
+   "rtf": 0.998
+  },
+  {
+   "instrument": "scissors",
+   "success": true,
+   "duration": 44.8,
+   "message": "handed over",
+   "offset": [
+    -0.0062,
+    -0.0012,
+    0.065
+   ],
+   "wall": 45.4,
+   "rtf": 1.0
+  },
+  {
+   "instrument": "scissors",
+   "success": true,
+   "duration": 44.8,
+   "message": "handed over",
+   "offset": [
+    0.0079,
+    -0.0064,
+    -0.0773
+   ],
+   "wall": 45.2,
+   "rtf": 1.001
+  },
+  {
+   "instrument": "scissors",
+   "success": true,
+   "duration": 43.8,
+   "message": "handed over",
+   "offset": [
+    -0.0136,
+    0.0199,
+    -0.0064
+   ],
+   "wall": 44.4,
+   "rtf": 0.947
+  },
+  {
+   "instrument": "scissors",
+   "success": true,
+   "duration": 44.7,
+   "message": "handed over",
+   "offset": [
+    0.0076,
+    -0.0178,
+    -0.0746
+   ],
+   "wall": 45.3,
+   "rtf": 0.998
+  },
+  {
+   "instrument": "scissors",
+   "success": true,
+   "duration": 44.6,
+   "message": "handed over",
+   "offset": [
+    0.0138,
+    0.0035,
+    -0.0306
+   ],
+   "wall": 44.9,
+   "rtf": 1.0
+  },
+  {
+   "instrument": "scissors",
+   "success": true,
+   "duration": 44.6,
+   "message": "handed over",
+   "offset": [
+    -0.0073,
+    -0.0164,
+    -0.0524
+   ],
+   "wall": 45.0,
+   "rtf": 1.0
+  }
+ ]
+}

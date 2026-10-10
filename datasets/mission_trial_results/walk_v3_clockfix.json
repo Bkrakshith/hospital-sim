@@ -1,0 +1,93 @@
+{
+ "goto": "failed",
+ "goto_message": "FineAlign: align fine align timeout (err +1259.8 +36.7 cm +2.2 deg)",
+ "log": [
+  {
+   "wall": 0.3,
+   "sim_t": 16.0,
+   "state": "running",
+   "step": "GoTo(theatre_instrument_table)",
+   "msg": "goto:theatre_instrument_table started",
+   "mode": "AUTO",
+   "pose": [
+    8.976,
+    -12.519,
+    0.775,
+    0.102
+   ],
+   "fall": false,
+   "station_error": [
+    15.57,
+    -9.545,
+    -96.9
+   ]
+  },
+  {
+   "wall": 149.1,
+   "sim_t": 164.0,
+   "state": "running",
+   "step": "ToReady",
+   "msg": "goto:theatre_instrument_table started",
+   "mode": "AUTO",
+   "pose": [
+    25.799,
+    -19.865,
+    0.779,
+    -1.486
+   ],
+   "fall": false,
+   "station_error": [
+    0.245,
+    -0.253,
+    -5.9
+   ]
+  },
+  {
+   "wall": 151.9,
+   "sim_t": 167.0,
+   "state": "running",
+   "step": "FineAlign",
+   "msg": "goto:theatre_instrument_table started",
+   "mode": "AUTO",
+   "pose": [
+    25.807,
+    -19.477,
+    0.783,
+    -1.544
+   ],
+   "fall": false,
+   "station_error": [
+    0.601,
+    -0.251,
+    -1.5
+   ]
+  },
+  {
+   "wall": 211.9,
+   "sim_t": 227.0,
+   "state": "failed",
+   "step": "",
+   "msg": "FineAlign: align fine align timeout (err +1259.8 +36.7 cm +2.2 deg)",
+   "mode": "STAND",
+   "pose": [
+    25.708,
+    -7.508,
+    0.782,
+    -1.58
+   ],
+   "fall": false,
+   "station_error": [
+    12.612,
+    -0.006,
+    0.6
+   ]
+  }
+ ],
+ "final_pose": [
+  25.708285567651366,
+  -7.508155020043064,
+  0.7819583525794366,
+  -1.580469231307061
+ ],
+ "fall": false
+}

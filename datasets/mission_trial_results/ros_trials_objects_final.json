@@ -1,0 +1,280 @@
+{
+ "summary": {
+  "scalpel_handle": {
+   "success": 9,
+   "trials": 10
+  },
+  "adson_forceps": {
+   "success": 10,
+   "trials": 10
+  }
+ },
+ "offset_range": [
+  0.02,
+  0.02,
+  0.08
+ ],
+ "seed": 21,
+ "results": [
+  {
+   "instrument": "scalpel_handle",
+   "success": true,
+   "duration": 47.5,
+   "message": "handed over",
+   "offset": [
+    0.0112,
+    0.0042,
+    0.0336
+   ],
+   "wall": 55.6,
+   "rtf": 1.009
+  },
+  {
+   "instrument": "scalpel_handle",
+   "success": true,
+   "duration": 47.7,
+   "message": "handed over",
+   "offset": [
+    -0.0164,
+    0.0052,
+    0.0769
+   ],
+   "wall": 52.7,
+   "rtf": 0.998
+  },
+  {
+   "instrument": "scalpel_handle",
+   "success": true,
+   "duration": 47.4,
+   "message": "handed over",
+   "offset": [
+    -0.0031,
+    -0.0155,
+    0.0733
+   ],
+   "wall": 53.8,
+   "rtf": 1.028
+  },
+  {
+   "instrument": "scalpel_handle",
+   "success": true,
+   "duration": 48.8,
+   "message": "handed over",
+   "offset": [
+    0.007,
+    -0.0121,
+    0.0275
+   ],
+   "wall": 53.9,
+   "rtf": 1.021
+  },
+  {
+   "instrument": "scalpel_handle",
+   "success": true,
+   "duration": 50.6,
+   "message": "handed over",
+   "offset": [
+    0.0197,
+    -0.0116,
+    0.0566
+   ],
+   "wall": 56.4,
+   "rtf": 1.009
+  },
+  {
+   "instrument": "scalpel_handle",
+   "success": true,
+   "duration": 49.6,
+   "message": "handed over",
+   "offset": [
+    0.008,
+    -0.0111,
+    -0.0504
+   ],
+   "wall": 62.0,
+   "rtf": 0.82
+  },
+  {
+   "instrument": "scalpel_handle",
+   "success": true,
+   "duration": 49.7,
+   "message": "handed over",
+   "offset": [
+    0.0182,
+    -0.0064,
+    -0.0094
+   ],
+   "wall": 61.5,
+   "rtf": 0.974
+  },
+  {
+   "instrument": "scalpel_handle",
+   "success": true,
+   "duration": 50.6,
+   "message": "handed over",
+   "offset": [
+    0.0062,
+    -0.0024,
+    -0.08
+   ],
+   "wall": 64.1,
+   "rtf": 1.003
+  },
+  {
+   "instrument": "scalpel_handle",
+   "success": false,
+   "duration": 38.7,
+   "message": "failed",
+   "offset": [
+    -0.0096,
+    -0.0011,
+    0.0418
+   ],
+   "wall": 44.3,
+   "rtf": 0.97
+  },
+  {
+   "instrument": "scalpel_handle",
+   "success": true,
+   "duration": 47.4,
+   "message": "handed over",
+   "offset": [
+    0.0043,
+    -0.0028,
+    -0.0494
+   ],
+   "wall": 50.9,
+   "rtf": 0.999
+  },
+  {
+   "instrument": "adson_forceps",
+   "success": true,
+   "duration": 44.6,
+   "message": "handed over",
+   "offset": [
+    0.0114,
+    -0.0125,
+    0.0358
+   ],
+   "wall": 45.1,
+   "rtf": 1.0
+  },
+  {
+   "instrument": "adson_forceps",
+   "success": true,
+   "duration": 44.7,
+   "message": "handed over",
+   "offset": [
+    -0.0001,
+    0.0021,
+    -0.0186
+   ],
+   "wall": 45.0,
+   "rtf": 1.0
+  },
+  {
+   "instrument": "adson_forceps",
+   "success": true,
+   "duration": 44.7,
+   "message": "handed over",
+   "offset": [
+    -0.0119,
+    -0.0132,
+    0.0226
+   ],
+   "wall": 44.9,
+   "rtf": 1.0
+  },
+  {
+   "instrument": "adson_forceps",
+   "success": true,
+   "duration": 43.8,
+   "message": "handed over",
+   "offset": [
+    -0.009,
+    -0.0194,
+    -0.0492
+   ],
+   "wall": 44.2,
+   "rtf": 1.002
+  },
+  {
+   "instrument": "adson_forceps",
+   "success": true,
+   "duration": 44.8,
+   "message": "handed over",
+   "offset": [
+    0.0168,
+    0.0085,
+    0.0128
+   ],
+   "wall": 45.2,
+   "rtf": 1.0
+  },
+  {
+   "instrument": "adson_forceps",
+   "success": true,
+   "duration": 44.6,
+   "message": "handed over",
+   "offset": [
+    -0.0039,
+    0.0127,
+    -0.0379
+   ],
+   "wall": 45.0,
+   "rtf": 1.0
+  },
+  {
+   "instrument": "adson_forceps",
+   "success": true,
+   "duration": 45.6,
+   "message": "handed over",
+   "offset": [
+    0.0053,
+    -0.0195,
+    0.0233
+   ],
+   "wall": 45.9,
+   "rtf": 1.0
+  },
+  {
+   "instrument": "adson_forceps",
+   "success": true,
+   "duration": 44.7,
+   "message": "handed over",
+   "offset": [
+    0.0189,
+    0.0083,
+    -0.0677
+   ],
+   "wall": 45.0,
+   "rtf": 1.0
+  },
+  {
+   "instrument": "adson_forceps",
+   "success": true,
+   "duration": 45.7,
+   "message": "handed over",
+   "offset": [
+    0.0037,
+    -0.0073,
+    0.0672
+   ],
+   "wall": 46.0,
+   "rtf": 1.0
+  },
+  {
+   "instrument": "adson_forceps",
+   "success": true,
+   "duration": 43.7,
+   "message": "handed over",
+   "offset": [
+    -0.0193,
+    -0.0195,
+    -0.0646
+   ],
+   "wall": 44.0,
+   "rtf": 1.0
+  }
+ ]
+}

@@ -1,0 +1,27 @@
+sent r (DAMP -> STAND), waiting for stand-up
+scalpel_handle   0 offset [0.0112, 0.0042, 0.0336] -> OK   handed over (50.4 s wall, rtf 1.0)
+scalpel_handle   1 offset [-0.0164, 0.0052, 0.0769] -> OK   handed over (46.1 s wall, rtf 1.0)
+scalpel_handle   2 offset [-0.0031, -0.0155, 0.0733] -> OK   handed over (45.8 s wall, rtf 0.999)
+scalpel_handle   3 offset [0.007, -0.0121, 0.0275] -> FAIL Pick: grasp failed: scalpel_handle 5.6 cm from the hand, lifted 9.3 cm (9.6 s wall, rtf 1.0)
+scalpel_handle   4 offset [0.0197, -0.0116, 0.0566] -> FAIL Pick: grasp failed: scalpel_handle 5.4 cm from the hand, lifted 10.4 cm (10.3 s wall, rtf 1.002)
+scalpel_handle   5 offset [0.008, -0.0111, -0.0504] -> FAIL Pick: grasp failed: scalpel_handle 5.1 cm from the hand, lifted 9.1 cm (10.7 s wall, rtf 1.0)
+scalpel_handle   6 offset [0.0182, -0.0064, -0.0094] -> OK   handed over (46.6 s wall, rtf 1.0)
+scalpel_handle   7 offset [0.0062, -0.0024, -0.08] -> OK   handed over (44.9 s wall, rtf 0.999)
+Traceback (most recent call last):
+  File "/home/rakshith/ntu_dev/Hospital_G1/ros2_ws/src/g1_mission/scripts/run_trials.py", line 130, in <module>
+    rclpy.shutdown()
+  File "/home/rakshith/ntu_dev/Hospital_G1/ros2_ws/src/g1_mission/scripts/run_trials.py", line 101, in main
+    print("request rejected:", r.message)
+  File "/home/rakshith/ntu_dev/Hospital_G1/ros2_ws/src/g1_mission/scripts/run_trials.py", line 48, in spin_for
+    rclpy.spin_once(self, timeout_sec=0.05)
+  File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/__init__.py", line 208, in spin_once
+    executor.spin_once(timeout_sec=timeout_sec)
+  File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/executors.py", line 812, in spin_once
+    self._spin_once_impl(timeout_sec)
+  File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/executors.py", line 801, in _spin_once_impl
+    handler, entity, node = self.wait_for_ready_callbacks(timeout_sec=timeout_sec)
+  File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/executors.py", line 784, in wait_for_ready_callbacks
+    return next(self._cb_iter)
+  File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/executors.py", line 685, in _wait_for_ready_callbacks
+    raise ExternalShutdownException()
+rclpy.executors.ExternalShutdownException

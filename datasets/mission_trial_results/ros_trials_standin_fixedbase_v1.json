@@ -1,0 +1,280 @@
+{
+ "summary": {
+  "scalpel_handle": {
+   "success": 9,
+   "trials": 10
+  },
+  "needle_driver": {
+   "success": 10,
+   "trials": 10
+  }
+ },
+ "offset_range": [
+  0.02,
+  0.02,
+  0.08
+ ],
+ "seed": 1,
+ "results": [
+  {
+   "instrument": "scalpel_handle",
+   "success": false,
+   "duration": 8.4,
+   "message": "Pick: grasp failed: scalpel_handle 152.2 cm from the hand, lifted -75.6 cm",
+   "offset": [
+    0.0005,
+    0.018,
+    -0.0569
+   ],
+   "wall": 8.4,
+   "rtf": 1.0
+  },
+  {
+   "instrument": "scalpel_handle",
+   "success": true,
+   "duration": 19.6,
+   "message": "handed over",
+   "offset": [
+    0.0179,
+    -0.0075,
+    -0.0123
+   ],
+   "wall": 19.9,
+   "rtf": 1.0
+  },
+  {
+   "instrument": "scalpel_handle",
+   "success": true,
+   "duration": 18.9,
+   "message": "handed over",
+   "offset": [
+    0.0131,
+    -0.0036,
+    0.0079
+   ],
+   "wall": 19.1,
+   "rtf": 1.0
+  },
+  {
+   "instrument": "scalpel_handle",
+   "success": true,
+   "duration": 19.1,
+   "message": "handed over",
+   "offset": [
+    -0.0189,
+    0.0101,
+    0.0061
+   ],
+   "wall": 19.3,
+   "rtf": 0.998
+  },
+  {
+   "instrument": "scalpel_handle",
+   "success": true,
+   "duration": 19.1,
+   "message": "handed over",
+   "offset": [
+    -0.0068,
+    0.0115,
+    -0.0315
+   ],
+   "wall": 19.4,
+   "rtf": 0.998
+  },
+  {
+   "instrument": "scalpel_handle",
+   "success": true,
+   "duration": 19.1,
+   "message": "handed over",
+   "offset": [
+    -0.0019,
+    -0.0146,
+    -0.0155
+   ],
+   "wall": 19.2,
+   "rtf": 0.998
+  },
+  {
+   "instrument": "scalpel_handle",
+   "success": true,
+   "duration": 19.1,
+   "message": "handed over",
+   "offset": [
+    -0.0119,
+    -0.0095,
+    0.0401
+   ],
+   "wall": 19.1,
+   "rtf": 1.002
+  },
+  {
+   "instrument": "scalpel_handle",
+   "success": true,
+   "duration": 19.1,
+   "message": "handed over",
+   "offset": [
+    -0.0088,
+    -0.0006,
+    0.0769
+   ],
+   "wall": 19.2,
+   "rtf": 0.997
+  },
+  {
+   "instrument": "scalpel_handle",
+   "success": true,
+   "duration": 18.9,
+   "message": "handed over",
+   "offset": [
+    0.0185,
+    0.009,
+    0.0066
+   ],
+   "wall": 19.2,
+   "rtf": 1.001
+  },
+  {
+   "instrument": "scalpel_handle",
+   "success": true,
+   "duration": 19.2,
+   "message": "handed over",
+   "offset": [
+    -0.0089,
+    -0.0136,
+    0.0752
+   ],
+   "wall": 19.4,
+   "rtf": 0.999
+  },
+  {
+   "instrument": "needle_driver",
+   "success": true,
+   "duration": 18.7,
+   "message": "handed over",
+   "offset": [
+    0.0006,
+    -0.0154,
+    0.0198
+   ],
+   "wall": 18.8,
+   "rtf": 1.0
+  },
+  {
+   "instrument": "needle_driver",
+   "success": true,
+   "duration": 18.6,
+   "message": "handed over",
+   "offset": [
+    0.0111,
+    0.0045,
+    0.0668
+   ],
+   "wall": 18.9,
+   "rtf": 1.0
+  },
+  {
+   "instrument": "needle_driver",
+   "success": true,
+   "duration": 18.5,
+   "message": "handed over",
+   "offset": [
+    -0.0184,
+    0.0011,
+    -0.0065
+   ],
+   "wall": 18.6,
+   "rtf": 1.0
+  },
+  {
+   "instrument": "needle_driver",
+   "success": true,
+   "duration": 18.2,
+   "message": "handed over",
+   "offset": [
+    -0.0175,
+    0.0057,
+    0.0564
+   ],
+   "wall": 18.2,
+   "rtf": 1.0
+  },
+  {
+   "instrument": "needle_driver",
+   "success": true,
+   "duration": 18.7,
+   "message": "handed over",
+   "offset": [
+    0.0037,
+    -0.0096,
+    0.0544
+   ],
+   "wall": 18.9,
+   "rtf": 0.999
+  },
+  {
+   "instrument": "needle_driver",
+   "success": true,
+   "duration": 18.3,
+   "message": "handed over",
+   "offset": [
+    0.0004,
+    0.0004,
+    0.0405
+   ],
+   "wall": 18.4,
+   "rtf": 1.0
+  },
+  {
+   "instrument": "needle_driver",
+   "success": true,
+   "duration": 18.9,
+   "message": "handed over",
+   "offset": [
+    -0.0141,
+    0.0128,
+    0.0293
+   ],
+   "wall": 19.0,
+   "rtf": 1.0
+  },
+  {
+   "instrument": "needle_driver",
+   "success": true,
+   "duration": 18.7,
+   "message": "handed over",
+   "offset": [
+    0.0115,
+    -0.0123,
+    0.0484
+   ],
+   "wall": 18.8,
+   "rtf": 0.999
+  },
+  {
+   "instrument": "needle_driver",
+   "success": true,
+   "duration": 18.5,
+   "message": "handed over",
+   "offset": [
+    -0.0123,
+    -0.0167,
+    0.0568
+   ],
+   "wall": 18.5,
+   "rtf": 1.001
+  },
+  {
+   "instrument": "needle_driver",
+   "success": true,
+   "duration": 18.7,
+   "message": "handed over",
+   "offset": [
+    0.0145,
+    0.0151,
+    -0.0045
+   ],
+   "wall": 18.7,
+   "rtf": 1.0
+  }
+ ]
+}

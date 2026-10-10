@@ -1,0 +1,72 @@
+{
+ "summary": {
+  "scalpel_handle": {
+   "success": 2,
+   "trials": 2
+  },
+  "adson_forceps": {
+   "success": 2,
+   "trials": 2
+  }
+ },
+ "offset_range": [
+  0.02,
+  0.02,
+  0.08
+ ],
+ "seed": 99,
+ "results": [
+  {
+   "instrument": "scalpel_handle",
+   "success": true,
+   "duration": 44.4,
+   "message": "handed over",
+   "offset": [
+    0.0002,
+    0.0026,
+    0.0019
+   ],
+   "wall": 49.3,
+   "rtf": 1.0
+  },
+  {
+   "instrument": "scalpel_handle",
+   "success": true,
+   "duration": 44.3,
+   "message": "handed over",
+   "offset": [
+    0.0189,
+    0.0046,
+    0.0109
+   ],
+   "wall": 44.6,
+   "rtf": 1.0
+  },
+  {
+   "instrument": "adson_forceps",
+   "success": true,
+   "duration": 43.0,
+   "message": "handed over",
+   "offset": [
+    -0.0085,
+    0.0022,
+    -0.0052
+   ],
+   "wall": 43.2,
+   "rtf": 0.999
+  },
+  {
+   "instrument": "adson_forceps",
+   "success": true,
+   "duration": 44.1,
+   "message": "handed over",
+   "offset": [
+    0.0044,
+    0.0172,
+    -0.0407
+   ],
+   "wall": 44.4,
+   "rtf": 0.999
+  }
+ ]
+}

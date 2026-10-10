@@ -1,0 +1,150 @@
+{
+ "summary": {
+  "veress_needle": {
+   "success": 5,
+   "trials": 5
+  },
+  "trocar": {
+   "success": 5,
+   "trials": 5
+  }
+ },
+ "offset_range": [
+  0.02,
+  0.02,
+  0.08
+ ],
+ "seed": 22,
+ "results": [
+  {
+   "instrument": "veress_needle",
+   "success": true,
+   "duration": 50.2,
+   "message": "handed over",
+   "offset": [
+    -0.0053,
+    -0.012,
+    -0.0658
+   ],
+   "wall": 50.6,
+   "rtf": 1.0
+  },
+  {
+   "instrument": "veress_needle",
+   "success": true,
+   "duration": 48.7,
+   "message": "handed over",
+   "offset": [
+    0.0061,
+    -0.0016,
+    0.078
+   ],
+   "wall": 48.9,
+   "rtf": 1.0
+  },
+  {
+   "instrument": "veress_needle",
+   "success": true,
+   "duration": 49.8,
+   "message": "handed over",
+   "offset": [
+    0.0141,
+    0.0135,
+    -0.0718
+   ],
+   "wall": 49.9,
+   "rtf": 1.0
+  },
+  {
+   "instrument": "veress_needle",
+   "success": true,
+   "duration": 51.8,
+   "message": "handed over",
+   "offset": [
+    0.0022,
+    0.0043,
+    -0.072
+   ],
+   "wall": 52.0,
+   "rtf": 0.998
+  },
+  {
+   "instrument": "veress_needle",
+   "success": true,
+   "duration": 47.7,
+   "message": "handed over",
+   "offset": [
+    -0.0009,
+    -0.0068,
+    -0.0454
+   ],
+   "wall": 48.0,
+   "rtf": 0.999
+  },
+  {
+   "instrument": "trocar",
+   "success": true,
+   "duration": 51.6,
+   "message": "handed over",
+   "offset": [
+    0.0119,
+    -0.0032,
+    -0.0635
+   ],
+   "wall": 51.9,
+   "rtf": 1.0
+  },
+  {
+   "instrument": "trocar",
+   "success": true,
+   "duration": 49.7,
+   "message": "handed over",
+   "offset": [
+    -0.0052,
+    0.0166,
+    -0.0177
+   ],
+   "wall": 49.9,
+   "rtf": 1.0
+  },
+  {
+   "instrument": "trocar",
+   "success": true,
+   "duration": 51.7,
+   "message": "handed over",
+   "offset": [
+    -0.0125,
+    -0.0173,
+    0.0019
+   ],
+   "wall": 52.0,
+   "rtf": 1.0
+  },
+  {
+   "instrument": "trocar",
+   "success": true,
+   "duration": 52.7,
+   "message": "handed over",
+   "offset": [
+    0.0067,
+    -0.0035,
+    0.0557
+   ],
+   "wall": 52.8,
+   "rtf": 1.0
+  },
+  {
+   "instrument": "trocar",
+   "success": true,
+   "duration": 49.8,
+   "message": "handed over",
+   "offset": [
+    0.001,
+    0.0119,
+    0.0104
+   ],
+   "wall": 50.0,
+   "rtf": 1.0
+  }
+ ]
+}
