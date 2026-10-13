@@ -39,10 +39,8 @@ Python environments:
 - `g1-whole-body-rl/` uses its own conda env `g1-mjx` (JAX/MJX); never mix it into `.venv`.
 - Isaac uses `~/isaacsim` python.
 
-Machine notes: RTX 3070 8 GB (share it: set `XLA_PYTHON_CLIENT_MEM_FRACTION=0.35` for JAX
-tests, Isaac needs most of the rest); prefix long/multi-process commands with
-`taskset -c 0-7,10-31` (logical CPUs 8/9 are defective). No sudo: do not rely on apt installs.
-OBSBOT Tiny 3 is on USB (`3564:ff02`, `/dev/video0`).
+GPU memory: when JAX tests and Isaac Sim share one GPU, set `XLA_PYTHON_CLIENT_MEM_FRACTION=0.35` for
+the JAX tests. The README of the master repository gives the computer requirements.
 
 ## 2. Joint order (Unitree hg, = motor index in LowCmd/LowState)
 

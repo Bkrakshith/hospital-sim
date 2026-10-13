@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 560" font-family="Noto Sans, Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#5b6472"/>
+    </marker>
+    <style>
+      .box{fill:#ffffff;stroke:#c9d1dc;stroke-width:1.5}
+      .in{fill:#eef5ff;stroke:#7aa7e0}
+      .core{fill:#fff7e8;stroke:#e3a33b;stroke-width:2}
+      .sim{fill:#eefaf2;stroke:#5bb57c}
+      .off{fill:#f4f1fb;stroke:#9a83cf}
+      .t{font-size:17px;font-weight:700;fill:#1f2733}
+      .s{font-size:13px;fill:#4a5462}
+      .l{font-size:12.5px;fill:#5b6472}
+      .grp{font-size:13px;font-weight:700;fill:#8a93a1;letter-spacing:1px}
+      .e{stroke:#5b6472;stroke-width:1.6;fill:none;marker-end:url(#a)}
+    </style>
+  </defs>
+  <rect x="0" y="0" width="1200" height="560" fill="#ffffff"/>
+
+  <text x="20" y="102" class="grp">INPUTS</text>
+  <rect x="20" y="114" width="210" height="62" rx="10" class="box in"/>
+  <text x="34" y="140" class="t">Keyboard teleop</text><text x="34" y="162" class="s">locomotion keys</text>
+  <rect x="20" y="188" width="210" height="62" rx="10" class="box in"/>
+  <text x="34" y="214" class="t">Webcam teleop</text><text x="34" y="236" class="s">arm + hand targets</text>
+
+  <text x="20" y="300" class="grp">AUTONOMY</text>
+  <rect x="20" y="312" width="210" height="62" rx="10" class="box in"/>
+  <text x="34" y="338" class="t">SLAM + Nav2</text><text x="34" y="360" class="s">slam_toolbox, AMCL, MPPI</text>
+  <rect x="20" y="386" width="210" height="62" rx="10" class="box in"/>
+  <text x="34" y="412" class="t">Task layer</text><text x="34" y="434" class="s">py_trees behaviour trees</text>
+
+  <rect x="330" y="150" width="240" height="190" rx="14" class="box core"/>
+  <text x="350" y="182" class="t">Mode manager</text>
+  <text x="350" y="206" class="s">DAMP · STAND · LOCO · MANIP</text>
+  <text x="350" y="226" class="s">NAV · AUTO · HOLD</text>
+  <text x="350" y="256" class="s">control lease · watchdog</text>
+  <text x="350" y="276" class="s">e-stop gate · speed zones</text>
+  <text x="350" y="314" class="l">the only node that drives</text>
+  <text x="350" y="330" class="l">the controller</text>
+
+  <rect x="640" y="170" width="220" height="150" rx="14" class="box core"/>
+  <text x="660" y="202" class="t">Controller</text>
+  <text x="660" y="226" class="s">ONNX whole-body policy</text>
+  <text x="660" y="246" class="s">50 Hz, PD targets 500 Hz</text>
+  <text x="660" y="290" class="l">/lowcmd  →  ·  ←  /lowstate</text>
+
+  <text x="950" y="28" class="grp">ROBOT STAND-INS</text>
+  <rect x="950" y="40" width="230" height="110" rx="12" class="box sim"/>
+  <text x="966" y="70" class="t">MuJoCo</text><text x="966" y="94" class="s">fast physics, 500 Hz</text>
+  <text x="966" y="114" class="s">g1-mujoco-sim</text><text x="966" y="134" class="l">lidar · odom · head camera</text>
+  <rect x="950" y="170" width="230" height="110" rx="12" class="box sim"/>
+  <text x="966" y="200" class="t">Isaac Sim 6.0</text><text x="966" y="224" class="s">RTX rendering, GPU lidar</text>
+  <text x="966" y="244" class="s">g1-isaac-sim</text><text x="966" y="264" class="l">lidar · odom · head camera</text>
+  <rect x="950" y="300" width="230" height="70" rx="12" class="box sim" stroke-dasharray="6 5"/>
+  <text x="966" y="330" class="t">Real G1 (later)</text><text x="966" y="352" class="s">same interface</text>
+
+  <text x="330" y="420" class="grp">SHARED SOURCES</text>
+  <rect x="330" y="432" width="240" height="96" rx="12" class="box off"/>
+  <text x="346" y="460" class="t">Hospital layout</text><text x="346" y="482" class="s">one Python file → Isaac USD</text>
+  <text x="346" y="502" class="s">and MuJoCo walls, same frame</text>
+  <rect x="640" y="432" width="220" height="96" rx="12" class="box off"/>
+  <text x="656" y="460" class="t">RL training</text><text x="656" y="482" class="s">MuJoCo MJX + PPO</text>
+  <text x="656" y="502" class="s">→ policy.onnx + json</text>
+  <rect x="950" y="432" width="230" height="96" rx="12" class="box off"/>
+  <text x="966" y="460" class="t">Robot model</text><text x="966" y="482" class="s">G1 29-DoF + BrainCo</text>
+  <text x="966" y="502" class="s">URDF · MJCF · spec</text>
+
+  <path d="M230 145 C 280 145, 280 215, 330 215" class="e"/>
+  <path d="M230 219 C 280 219, 280 240, 330 240" class="e"/>
+  <path d="M230 343 C 285 343, 285 290, 330 290" class="e"/>
+  <path d="M230 417 C 290 417, 295 315, 330 315" class="e"/>
+  <path d="M570 245 L 640 245" class="e"/>
+  <path d="M860 220 C 905 220, 905 95, 950 95" class="e"/>
+  <path d="M860 240 L 950 228" class="e"/>
+  <path d="M860 270 C 905 270, 905 335, 950 335" class="e"/>
+  <path d="M750 432 L 750 320" class="e"/>
+  <path d="M1065 432 L 1065 370" class="e"/>
+  <path d="M570 470 C 760 400, 820 300, 950 255" class="e" stroke-dasharray="5 4"/>
+  <path d="M570 485 C 780 430, 880 140, 950 125" class="e" stroke-dasharray="5 4"/>
+</svg>

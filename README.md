@@ -1,284 +1,308 @@
-# hospital-sim: a humanoid robot in a simulated hospital
+# WardZero: the simulated hospital where robots train before they meet patients
 
-This repository is the master repository of hospital-sim, a Unitree G1 humanoid robot in a simulated
-hospital with a surgical wing. The following parts drive the robot:
+<p align="center">
+  <img src="docs/images/isaac_walk.gif" alt="A Unitree G1 humanoid robot walks along a hospital corridor in Isaac Sim" width="760">
+</p>
 
-- a whole-body controller
-- a mode manager with safety gates
-- keyboard teleoperation or webcam teleoperation
-- SLAM and Nav2 navigation
-- a scripted scrub-nurse mission
-- an operator UI for an iPad
+<p align="center">
+  <a href="LICENSE"><img alt="License: Apache-2.0" src="https://img.shields.io/badge/license-Apache--2.0-blue"></a>
+  <img alt="Ubuntu 22.04" src="https://img.shields.io/badge/Ubuntu-22.04-E95420?logo=ubuntu&logoColor=white">
+  <img alt="ROS 2 Humble" src="https://img.shields.io/badge/ROS%202-Humble-22314E?logo=ros&logoColor=white">
+  <img alt="MuJoCo" src="https://img.shields.io/badge/MuJoCo-3.x-1f6feb">
+  <img alt="Isaac Sim 6.0" src="https://img.shields.io/badge/Isaac%20Sim-6.0-76B900?logo=nvidia&logoColor=white">
+</p>
 
-Two simulators stand in for the robot. MuJoCo gives fast physics. Isaac Sim gives rendering, lidar
-and cameras.
+<p align="center">
+  <a href="https://bkrakshith.github.io/wardzero/">Project page and video clips</a> ·
+  <a href="#install-wardzero-on-your-computer">Install</a> ·
+  <a href="#computer-requirements">Computer requirements</a> ·
+  <a href="#how-wardzero-works">How it works</a>
+</p>
 
-This repository holds no robot code of its own. It holds the interface contract, the shared
-environment script and the list of component repositories. It checks the component repositories out
-side by side, in the layout that the code expects. Clone this repository to get the whole stack.
+WardZero is an open-source simulated hospital for robots. You can download it, run it on your own
+computer and use it to build and test your own robot systems. A robot can walk, make maps and navigate
+in the hospital before it goes near a real patient.
 
-Each component is its own GitHub repository. Because of this, a different robot can reuse the
-hospital, the ROS 2 packages and the operator UI. The new robot brings its own description, simulator
-bindings and controller. Repositories with the prefix `hospital-sim-` are robot agnostic. Repositories
-with the prefix `g1-` are specific to the G1 29-DoF rev 1.0 with BrainCo Revo2 hands.
+The hospital has a ground floor and a surgical wing with corridors, pre-operative bays, a sterile store,
+a scrub room and an operating theatre. The reference robot is a Unitree G1 humanoid with two BrainCo
+Revo2 hands. The platform does not depend on this robot. You can add your own robot and keep the
+hospital, the ROS 2 packages and the tools.
 
-The table below lists the component repositories and the folder of each one.
+Built by Rakshith Bangalore Kumaraswamy.
 
-| Folder | Repository | What it holds |
+> **Note:** WardZero is a simulation. Nothing in this repository has run on a physical robot or in a
+> real hospital.
+
+## What you can do with WardZero
+
+Use WardZero to do these tasks on your own computer:
+
+- Run a humanoid robot in the hospital in two simulators: MuJoCo for fast physics and Isaac Sim for realistic sensors.
+- Drive the robot with the keyboard or with your arms and hands in front of a webcam.
+- Make a map of the hospital with slam_toolbox and navigate with Nav2.
+- Train a whole-body controller with reinforcement learning in MuJoCo MJX.
+- Add your own robot model, simulator bindings and controller, and use the same hospital.
+
+The table below shows the main parts of WardZero.
+
+| | |
+|---|---|
+| <img src="docs/images/operating_theatre.jpg" alt="Operating theatre in Isaac Sim" width="400"><br>**Hospital and surgical wing.** One Python layout file makes the Isaac Sim scene. | <img src="docs/images/mujoco_world.jpg" alt="MuJoCo collision model of the hospital" width="400"><br>**MuJoCo hospital world.** A generator makes this world from the same layout file, in the same world frame. |
+| <img src="docs/images/robot_model.jpg" alt="Unitree G1 with BrainCo Revo2 hands" width="400"><br>**Reference robot.** A Unitree G1 29-DoF with two 6-DoF BrainCo Revo2 hands, as URDF and MJCF. | <img src="docs/images/isaac_backend.jpg" alt="Isaac Sim run with head camera, lidar and joint plots" width="400"><br>**Isaac Sim backend.** The same robot interface as the real robot, with lidar and a head camera. |
+| <img src="docs/images/slam_navigation.jpg" alt="SLAM map and robot path through the hospital" width="400"><br>**Mapping and navigation.** slam_toolbox makes the map while Nav2 drives the robot on a route. | <img src="docs/images/controller_training.jpg" alt="Controller before and after training" width="400"><br>**Controller training.** PPO in MuJoCo MJX trains the robot to stand. |
+
+More clips are on the [project page](https://bkrakshith.github.io/wardzero/).
+
+## Computer requirements
+
+WardZero has three workloads. Each workload needs a different computer. The MuJoCo workload runs
+without Isaac Sim and without an NVIDIA GPU, so you can start with a small computer.
+
+The table below gives the workloads.
+
+| Workload | What it runs | NVIDIA GPU |
 |---|---|---|
-| `hospital-sim-env/` | [hospital-sim-env](hospital-sim-env/README.md) | Isaac Sim hospital and surgical wing, the layout generator that is the single source of room geometry, and the surgical instruments with their placements |
-| `g1-brainco-description/` | [g1-brainco-description](g1-brainco-description/README.md) | Canonical G1 + BrainCo model: URDF, MJCF, meshes, robot_spec.json, build and check scripts |
-| `g1-mujoco-sim/` | [g1-mujoco-sim](g1-mujoco-sim/README.md) | MuJoCo version of the hospital, generated from the same layout, with the G1 placed in it |
-| `g1-isaac-sim/` | [g1-isaac-sim](g1-isaac-sim/README.md) | G1 in the Isaac hospital: physics layer, lidar, cameras, DDS and ROS 2 bridge |
-| `g1-whole-body-rl/` | [g1-whole-body-rl](g1-whole-body-rl/README.md) | Whole-body controller training in MuJoCo/MJX and the ONNX export the controller node loads |
-| `ros2_ws/src/hospital-sim-ros2/` | [hospital-sim-ros2](ros2_ws/src/hospital-sim-ros2/README.md) | ROS 2 Humble packages: interfaces, controller, mode manager, keyboard teleop, MuJoCo sim node, navigation, mission, perception node, bringup |
-| `g1-webcam-teleop/` | [g1-webcam-teleop](g1-webcam-teleop/README.md) | Seated webcam teleoperation (OBSBOT Tiny 3) through a fork of xr_teleoperate |
-| `hospital-sim-ui/` | [hospital-sim-ui](hospital-sim-ui/README.md) | Operator UI: iPad PWA, engineering console and the aiohttp + rclpy server behind them |
-| `docs/` | this repo | [interfaces.md](docs/interfaces.md) is the binding contract between the parts. [architecture.md](docs/architecture.md) has the full system map |
-| `datasets/` | Hugging Face | Recorded data. Not in git, see [datasets/README.md](datasets/README.md) |
+| MuJoCo simulation | The hospital in MuJoCo, the controller, the mode manager, teleoperation, SLAM and navigation | Not necessary |
+| Isaac Sim simulation | The same ROS 2 stack on the Isaac Sim hospital with realistic lidar and camera | Necessary |
+| Controller training | Reinforcement learning in MuJoCo MJX | Necessary |
 
-The folder `ros2_ws/` is the colcon workspace. Only its folder `src/hospital-sim-ros2` is a
-repository. The build produces the folders `build/`, `install/` and `log/`.
+The table below gives the minimum computer and the desired computer.
 
-An instrument detector for the mission is developed in a separate private repository. Nothing here
-depends on it. The perception node runs in ground-truth mode in simulation. You can supply any
-detector that follows the ONNX contract of the node through a parameter.
-
-## How the system works
-
-Every part speaks the low-level interface of the real robot. The controller publishes motor targets
-on `/lowcmd` at 500 Hz and reads the joint state on `/lowstate`, exactly as on the hardware. In
-simulation, the MuJoCo node or the Isaac bridge consumes `/lowcmd` and produces `/lowstate`. The same
-node also produces the sensors of a real G1: the lidar scan, the odometry and the head camera.
-Because of this, every layer above the controller is identical in MuJoCo, in Isaac and, later, on the
-robot.
-
-The mode manager sits above the controller. It owns a state machine with the modes DAMP, STAND, LOCO,
-MANIP, NAV, AUTO and HOLD. It is the only node that sends commands to the controller. Every input
-source publishes requests to the mode manager, and the mode manager arbitrates between them. The
-input sources are the keyboard, the webcam teleoperation, the operator UI, Nav2 and the mission. The
-mode manager applies four rules:
-
-- A control lease decides which input source is in charge.
-- A watchdog drops to HOLD when the heartbeat of the UI stops.
-- A hardware e-stop gate overrides everything.
-- Speed zones from the map cap the velocity.
-
-HOLD stops the robot in place. DAMP powers the robot off.
-
-The controller runs a whole-body policy at 50 Hz. The policy is an ONNX export. The controller
-converts the output of the policy into PD targets. The RL repository trains the policy in MuJoCo/MJX
-in three stages:
-
-1. Stand.
-2. Walk with upper-body targets.
-3. Track full motion.
-
-No policy is trained yet, so the controller uses a placeholder legs-only policy.
-
-Navigation uses standard ROS 2 packages. The package slam_toolbox builds the map. The packages
-map_server and AMCL localise the robot. Nav2, with its MPPI controller plugin, plans the path and
-drives the robot. In NAV mode, the mode manager converts the velocity command of Nav2 into controller
-input.
-
-The mission layer is a py_trees behaviour tree that plays the scrub nurse. The mission has five steps:
-
-1. Go to the instrument table.
-2. Locate an instrument.
-3. Pick the instrument.
-4. Carry the instrument to the surgeon.
-5. Hand the instrument over.
-
-The mission uses navigation for the walking part. It publishes upper-body targets and hand targets
-for the arm part.
-
-The operator UI is one process that combines an aiohttp web server with an rclpy node. It serves an
-iPad web app for clinical staff and an engineering console for developers. Both run over a WebSocket
-protocol with roles, a 3 s undo window, alarms and an audit log. The operator UI also runs SLAM and
-Nav2, and it manages maps and goals.
-
-A Python layout file defines the hospital once. From this file, the environment repository generates
-the Isaac USD layers. The MuJoCo repository generates matching walls and furniture boxes in the same
-world frame. Because of this, a map built in one simulator is valid in the other.
-
-## Architecture
-
-```mermaid
-flowchart LR
-  subgraph IN["Inputs"]
-    IPAD["iPad app / console<br/>hospital-sim-ui"]
-    KB["keyboard teleop"]
-    CAM["webcam teleop<br/>g1-webcam-teleop"]
-  end
-  subgraph WS["Workstation, ROS 2 Humble (hospital-sim-ros2)"]
-    UI["ui server<br/>auth, lease, alarms, audit"]
-    MGR["g1_teleop_manager<br/>mode FSM, arbiter, watchdog, e-stop gate"]
-    NAV["g1_navigation<br/>slam_toolbox, AMCL, Nav2"]
-    MIS["g1_mission<br/>scrub-nurse behaviour tree"]
-    PER["g1_perception<br/>gt mode or external ONNX"]
-    CTRL["g1_controller<br/>ONNX policy 50 Hz, PD 500 Hz"]
-  end
-  subgraph SIM["Robot stand-ins"]
-    MJ["g1_mujoco_sim<br/>scene from g1-mujoco-sim"]
-    IS["g1-isaac-sim<br/>scene from hospital-sim-env"]
-  end
-  RL["g1-whole-body-rl<br/>training, ONNX export"]
-  DESC["g1-brainco-description<br/>URDF, MJCF, meshes"]
-
-  IPAD -- "WSS" --> UI
-  UI --> MGR
-  KB --> MGR
-  CAM -- "upper-body + hand targets" --> MGR
-  NAV -- "cmd_vel" --> MGR
-  MIS --> MGR
-  MIS --> NAV
-  PER --> MIS
-  MGR -- "cmd_vel, targets, mode" --> CTRL
-  CTRL -- "/lowcmd" --> MJ
-  CTRL -- "/lowcmd" --> IS
-  MJ -- "/lowstate, /scan, /odom, camera" --> CTRL
-  IS -- "/lowstate, /scan, /odom, camera" --> CTRL
-  MJ --> NAV
-  IS --> NAV
-  RL -- "policy.onnx + policy.json" --> CTRL
-  DESC --> RL
-  DESC --> MJ
-  DESC --> IS
-```
-
-The full node catalogue with every topic is in [docs/architecture.md](docs/architecture.md). The
-topic names, the joint order, the modes, the key bindings and the policy sidecar format are in
-[docs/interfaces.md](docs/interfaces.md).
-
-## Dependencies
-
-The table below lists the system software. Install it once on the workstation.
-
-| Dependency | Version used | Needed by |
+| Item | Minimum | Desired |
 |---|---|---|
-| Ubuntu | 22.04 | everything |
-| ROS 2 Humble with Nav2, slam_toolbox, robot_state_publisher, rviz2, rmw_cyclonedds_cpp | apt packages | hospital-sim-ros2, hospital-sim-ui, g1-webcam-teleop |
-| Python | 3.10 (system) | the shared `.venv` |
-| colcon | any recent | building `ros2_ws` |
-| vcstool | 0.3.0 | checking out the component repos |
-| uv | 0.12.19 | USD scripts (`usd-core`) and the object generator |
-| conda (miniconda) | any recent | the `g1-mjx` and `ultra-sim2sim` environments of g1-whole-body-rl |
-| NVIDIA driver and CUDA-capable GPU | RTX 3070 8 GB used here | Isaac Sim, JAX training, lidar ray casting |
-| Isaac Sim | 6.0.0 | hospital-sim-env scene work and g1-isaac-sim |
-| ffmpeg | any | rendering videos from recordings |
+| Operating system | Ubuntu 22.04 LTS, x86_64 | Ubuntu 22.04 LTS, x86_64 |
+| CPU | 4 cores (Intel Core i7 7th generation or AMD Ryzen 5) | 8 to 16 cores (Intel Core i9 or AMD Ryzen 9) |
+| RAM | 16 GB for MuJoCo only. 32 GB with Isaac Sim. | 64 GB |
+| GPU | None for MuJoCo only. NVIDIA RTX with 8 GB of VRAM for Isaac Sim and for training. | NVIDIA RTX with 16 GB of VRAM or more (GeForce RTX 4080 or better) |
+| NVIDIA driver | The version that NVIDIA specifies for your Isaac Sim release | 595.58 or later (NVIDIA requirement for Isaac Sim 6.0) |
+| Storage | 20 GB of SSD for MuJoCo only. 200 GB of SSD with Isaac Sim and its asset packs. | 500 GB of NVMe SSD |
+| Camera (optional) | Any USB webcam that supports UVC, for webcam teleoperation | OBSBOT Tiny 3, which adds automatic pan, tilt and zoom |
 
-Each component README lists its own Python packages with exact versions and ships a
-`requirements.txt`. The following assets and data are not in any repository:
+Read these notes before you select a computer:
 
-- the NVIDIA Isaac Sim asset pack and the Isaac for Healthcare asset catalog (see hospital-sim-env)
-- the recorded datasets on Hugging Face (see `datasets/README.md`)
-- trained policies, of which there are none yet
+- NVIDIA gives the official Isaac Sim requirements in the [Isaac Sim documentation](https://docs.isaacsim.omniverse.nvidia.com/latest/installation/requirements.html). NVIDIA specifies 16 GB of VRAM as the minimum for Isaac Sim 6.0.
+- WardZero also runs on an 8 GB GPU with the reduced asset set. The full hospital scene then uses about 7 GB of VRAM. Use the command `select_assets.py lite` (see [hospital-sim-env](hospital-sim-env/README.md)).
+- On a GPU with 8 GB of VRAM, the first training stage (stand) took about 1 hour with 2048 robots in parallel.
+- The minimum values for the MuJoCo workload are estimates. The values for Isaac Sim come from NVIDIA.
+- Isaac Sim needs about 35 GB of storage. The NVIDIA asset packs need about 100 GB more.
 
-## Install
+## Install WardZero on your computer
 
-1. Clone the master repository and check out the component repositories.
+Do these steps on a computer with Ubuntu 22.04. The steps install the MuJoCo workload first. The Isaac
+Sim and training steps are optional.
+
+1. Install ROS 2 Humble. Follow the [ROS 2 Humble installation guide](https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debs.html). Then install the packages that WardZero uses.
 
 ```bash
-git clone https://github.com/Bkrakshith/hospital-sim.git Hospital_G1
-cd Hospital_G1
-git submodule update --init          # the component repos, pinned to tested commits
-# or, to track each component's main branch instead:
-pip install vcstool && vcs import < hospital-sim.repos
+sudo apt install ros-humble-desktop ros-humble-navigation2 ros-humble-nav2-bringup \
+  ros-humble-slam-toolbox ros-humble-rmw-cyclonedds-cpp \
+  python3-colcon-common-extensions python3-vcstool python3-venv git
 ```
 
-2. Create the shared Python environment and install the requirements of each component.
+2. Clone this repository and all the component repositories.
 
 ```bash
-python3 -m venv --system-site-packages .venv      # system site-packages so rclpy is visible
+git clone --recurse-submodules https://github.com/Bkrakshith/hospital-sim.git WardZero
+cd WardZero
+```
+
+3. Make the shared Python environment and install the Python packages.
+
+```bash
+python3 -m venv --system-site-packages .venv      # system site-packages make rclpy visible
 source env.sh
-for r in g1-brainco-description g1-mujoco-sim ros2_ws/src/hospital-sim-ros2 hospital-sim-ui g1-webcam-teleop hospital-sim-env; do
+for r in g1-brainco-description g1-mujoco-sim ros2_ws/src/hospital-sim-ros2 g1-webcam-teleop hospital-sim-env; do
   [ -f "$r/requirements.txt" ] && .venv/bin/pip install -r "$r/requirements.txt"
 done
 ```
 
-The teleop repository needs pinocchio from pre-built wheels. The RL repository needs its conda
-environment. Both procedures are in their READMEs.
-
-3. Build the ROS 2 packages.
+4. Build the ROS 2 packages.
 
 ```bash
 source env.sh && (cd ros2_ws && colcon build --symlink-install) && source env.sh
 ```
 
-## Environments
+5. Run the robot in the MuJoCo hospital.
 
-The script `env.sh` prepares the shell. It strips the conda libraries from `LD_LIBRARY_PATH`, because
-they break rclpy. It sources ROS 2 Humble and activates the shared `.venv`. It sources the `ros2_ws`
-overlay after the build has produced it. It also exports `HG1_ROOT`, which the launch files and the
-scripts use to find sibling components.
+```bash
+ros2 launch g1_bringup sim.launch.py
+```
 
-The table below lists the Python environments and their users.
+6. Optional: install Isaac Sim 6.0 and the NVIDIA asset packs. Then connect the assets to the hospital
+   scene. The [hospital-sim-env README](hospital-sim-env/README.md) gives the procedure.
 
-| Environment | Used by | Notes |
-|---|---|---|
-| `.venv/` | ROS 2 nodes, UI server, teleop, objects, robot checks, MuJoCo | system python 3.10 with system site-packages. Install with `.venv/bin/pip` |
-| conda `g1-mjx` | g1-whole-body-rl | JAX / MJX, mujoco 3.10. Keep it out of `.venv` |
-| conda `ultra-sim2sim` | g1-whole-body-rl/ultra_eval | the released ULTRA teacher |
-| `~/isaacsim` python | g1-isaac-sim, hospital-sim-env/isaac | Isaac Sim 6.0, python 3.12 |
+7. Optional: make the conda environment for controller training. The
+   [g1-whole-body-rl README](g1-whole-body-rl/README.md) gives the procedure.
+
+8. Optional: install the pinocchio wheels for webcam teleoperation. The
+   [g1-webcam-teleop README](g1-webcam-teleop/README.md) gives the procedure.
+
+To follow the main branch of each component instead of the tested versions, use vcstool:
+
+```bash
+vcs import < hospital-sim.repos
+```
 
 ## Run
 
-Each command below runs one part of the stack. The comment above each command says what it runs.
+Run `source env.sh` in each new terminal first. Each command below runs one part of WardZero.
 
 ```bash
-source env.sh
-
-# MuJoCo hospital with the G1, controller and mode manager
+# The robot in the MuJoCo hospital, with the controller and the mode manager
 ros2 launch g1_bringup sim.launch.py
 
-# the same stack on Isaac Sim (start the simulator first, in another terminal)
+# The same stack on Isaac Sim (run the simulator first, in a different terminal)
 ./g1-isaac-sim/run.sh --headless
 ros2 launch g1_bringup sim.launch.py backend:=isaac
 
-# SLAM and navigation on top of a running sim
+# Mapping and navigation, on a simulator that runs
 ros2 launch g1_bringup slam.launch.py use_sim_time:=true
 ros2 launch g1_bringup nav.launch.py
 
-# the scripted scrub-nurse mission (fixed base, theatre objects)
-ros2 launch g1_bringup mission.launch.py
-
-# operator UI and engineering console
-ros2 launch g1_bringup dashboard.launch.py        # https://localhost:8443 and /console
-
-# open the hospital scene in the Isaac Sim editor
+# The hospital scene in the Isaac Sim editor
 ./hospital-sim-env/isaac/launch_isaac.sh --open
 ```
 
-Each component README has its own build, test and run instructions.
+Each component README gives more commands and options.
 
-## Test / check
+## Test the installation
 
-The commands below check the installation. The comment beside each command gives the expected
-result.
+Run these commands to test the installation. The comment beside each command gives the expected result.
 
 ```bash
 source env.sh
 .venv/bin/python g1-brainco-description/check_model.py          # 27 PASS, 2 WARN, 0 FAIL
-.venv/bin/python g1-mujoco-sim/build_world.py --check            # scenes compile
+.venv/bin/python g1-mujoco-sim/build_world.py --check            # the scenes compile
 (cd ros2_ws && colcon test && colcon test-result --verbose | tail -3)
-.venv/bin/python -m pytest hospital-sim-ui/server/tests -q       # 68 passed
 ```
 
-## Working across repositories
+## How WardZero works
 
-The contract in `docs/interfaces.md` lets the repositories change independently. Read the contract
-before you change a topic, a joint order, a config path or a folder name. Update the contract in the
-same change. Components find each other through `HG1_ROOT` or relative to their own location, never
-through absolute paths. Because of this, the checkout can live in any folder. When a component
-changes in a way that the others must follow, update its submodule pin here in the same pull request.
+The diagram shows the parts of WardZero and the data between them.
 
-Machine notes for the development workstation are at the end of `docs/interfaces.md`.
+<p align="center">
+  <img src="docs/images/architecture.svg" alt="WardZero architecture" width="900">
+</p>
+
+The controller uses the interface of the real robot. It sends motor targets on `/lowcmd` at 500 Hz and
+reads the joint state on `/lowstate`. In simulation, the MuJoCo node or the Isaac Sim bridge receives
+`/lowcmd` and sends `/lowstate`. The simulators also send the sensor data of a real G1: the lidar scan,
+the odometry and the head camera. Thus every layer above the controller is the same in MuJoCo, in Isaac
+Sim and on a real robot.
+
+The mode manager is above the controller. It has a state machine with the modes DAMP, STAND, LOCO,
+MANIP, NAV, AUTO and HOLD. The mode manager is the only node that sends commands to the controller. The
+keyboard, the webcam teleoperation, Nav2 and the task layer send requests to the mode manager. The mode
+manager then applies these safety rules:
+
+- A control lease sets which input is in control.
+- A watchdog changes the mode to HOLD when a heartbeat stops.
+- A hardware e-stop gate stops all inputs.
+- Speed zones from the map limit the velocity.
+
+In HOLD, the robot stops in its position. In DAMP, the motors are off.
+
+The controller runs a whole-body policy at 50 Hz and changes its output into PD targets. The policy
+comes from the training repository, which trains it in MuJoCo MJX in stages. The first stage teaches the
+robot to stand. The later stages teach walking and motion tracking. Until these stages are complete, the
+ROS 2 stack uses a placeholder policy for the legs.
+
+Navigation uses standard ROS 2 packages. slam_toolbox makes the map. The map server and AMCL find the
+position of the robot. Nav2 with the MPPI controller plans the path and drives the robot. The task layer
+uses py_trees behaviour trees.
+
+One Python layout file defines the hospital. The environment repository makes the Isaac Sim scene from
+this file. The MuJoCo repository makes walls and furniture boxes from the same file, in the same world
+frame. Thus a map that you make in one simulator is correct in the other simulator.
+
+The topic names, the joint order, the modes, the key bindings and the policy format are in
+[docs/interfaces.md](docs/interfaces.md).
+
+## Repositories
+
+WardZero has one master repository and one repository for each component. The master repository is this
+repository. It holds no robot code. It holds the shared environment script, the interface contract and
+the versions of the component repositories. Repositories with the prefix `hospital-sim-` do not depend on
+a robot. Repositories with the prefix `g1-` are specific to the G1 robot.
+
+The table below lists the repositories.
+
+| Folder | Repository | Contents |
+|---|---|---|
+| `hospital-sim-env/` | [hospital-sim-env](https://github.com/Bkrakshith/hospital-sim-env) | The Isaac Sim hospital and surgical wing, the layout generator, and the surgical objects |
+| `g1-brainco-description/` | [g1-brainco-description](https://github.com/Bkrakshith/g1-brainco-description) | The G1 with BrainCo hands: URDF, MJCF, meshes, robot specification, build and check scripts |
+| `g1-mujoco-sim/` | [g1-mujoco-sim](https://github.com/Bkrakshith/g1-mujoco-sim) | The MuJoCo hospital world with the G1 in it |
+| `g1-isaac-sim/` | [g1-isaac-sim](https://github.com/Bkrakshith/g1-isaac-sim) | The G1 in the Isaac Sim hospital: physics, lidar, cameras, DDS and ROS 2 bridge |
+| `g1-whole-body-rl/` | [g1-whole-body-rl](https://github.com/Bkrakshith/g1-whole-body-rl) | Whole-body controller training in MuJoCo MJX and the ONNX export |
+| `ros2_ws/src/hospital-sim-ros2/` | [hospital-sim-ros2](https://github.com/Bkrakshith/hospital-sim-ros2) | The ROS 2 Humble packages: interfaces, controller, mode manager, teleoperation, simulator node, navigation, task layer, bringup |
+| `g1-webcam-teleop/` | [g1-webcam-teleop](https://github.com/Bkrakshith/g1-webcam-teleop) | Webcam teleoperation of the arms and hands |
+| `docs/` | this repository | The interface contract and the system architecture |
+| `datasets/` | Hugging Face | Recorded data. It is not in git. See [datasets/README.md](datasets/README.md). |
+
+The folder `ros2_ws/` is the colcon workspace. The build makes the folders `build/`, `install/` and `log/` in it.
+
+## Dependencies
+
+The table below lists the system software and the components that use it.
+
+| Dependency | Version | Used by |
+|---|---|---|
+| Ubuntu | 22.04 | all components |
+| ROS 2 Humble with Nav2, slam_toolbox, robot_state_publisher, rviz2, rmw_cyclonedds_cpp | apt packages | hospital-sim-ros2, g1-webcam-teleop |
+| Python | 3.10 (system) | the shared `.venv` |
+| colcon | any recent version | the build of `ros2_ws` |
+| vcstool | 0.3.0 or later | the checkout of the component repositories |
+| uv | 0.12 or later | the USD scripts (`usd-core`) and the object generator |
+| conda (Miniconda) | any recent version | the training environments of g1-whole-body-rl |
+| Isaac Sim | 6.0 | hospital-sim-env scene work and g1-isaac-sim |
+| ffmpeg | any version | videos from recordings |
+
+Each component README lists its Python packages with versions. Each component also has a
+`requirements.txt`. These items are not in any repository:
+
+- the NVIDIA Isaac Sim asset pack and the Isaac for Healthcare asset catalog (see hospital-sim-env)
+- the recorded datasets (see `datasets/README.md`)
+
+## Python environments
+
+The script `env.sh` prepares the shell. It removes the conda libraries from `LD_LIBRARY_PATH`, because
+they stop rclpy. It sources ROS 2 Humble and activates the shared `.venv`. After the build, it also
+sources the `ros2_ws` overlay. It sets `HG1_ROOT`, which the launch files and the scripts use to find
+the other components.
+
+The table below lists the Python environments.
+
+| Environment | Used by | Notes |
+|---|---|---|
+| `.venv/` | ROS 2 nodes, teleoperation, objects, robot checks, MuJoCo | System Python 3.10 with system site-packages. Install packages with `.venv/bin/pip`. |
+| conda `g1-mjx` | g1-whole-body-rl | JAX and MJX, MuJoCo 3.10. Do not install these packages into `.venv`. |
+| conda `ultra-sim2sim` | g1-whole-body-rl/ultra_eval | The released ULTRA teacher policy, for comparison |
+| Isaac Sim Python | g1-isaac-sim, hospital-sim-env/isaac | Isaac Sim 6.0, Python 3.12 |
+
+## Add your own robot
+
+Keep the repositories with the prefix `hospital-sim-`. Replace the repositories with the prefix `g1-`
+with repositories for your robot:
+
+1. Make a description repository with the URDF and MJCF of your robot.
+2. Connect your robot to the MuJoCo world and to the Isaac Sim scene.
+3. Train or supply a controller that reads `/lowstate` and writes `/lowcmd`.
+4. Read [docs/interfaces.md](docs/interfaces.md) and keep the same topics, so that the ROS 2 stack works without change.
+
+When you change a topic, a joint order, a configuration path or a folder name, also change the
+interface contract. Components find each other through `HG1_ROOT` or relative to their own folder.
+They do not use absolute paths, so you can put the checkout in any folder.
 
 ## Status
 
-The stack runs end to end in both simulators with a placeholder locomotion policy. The whole-body
-policy is not trained yet. The instrument detector is not part of this assembly. Nothing has run on a
-physical robot.
+These parts work in both simulators:
+
+- the robot interface, the mode manager and the teleoperation
+- mapping and navigation through the hospital and the surgical wing
+- the first training stage of the controller (stand)
+
+The walking and motion-tracking stages of the controller are not trained yet. The ROS 2 stack walks
+with a placeholder policy for the legs. Nothing has run on a physical robot.
 
 ## License
 
