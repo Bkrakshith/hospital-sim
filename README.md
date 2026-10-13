@@ -33,6 +33,35 @@ Built by Rakshith Bangalore Kumaraswamy.
 > **Note:** WardZero is a simulation. Nothing in this repository has run on a physical robot or in a
 > real hospital.
 
+## Versions
+
+| Version | Branch / tag | Contents |
+|---|---|---|
+| 1.0 | `main`, tag `v1.0` | The original hospital and surgical wing. Doorways are open gaps. |
+| 2.0 | `v2` | The hospital is closer to UK guidance. It adds fire doors, bed lifts, a re-planned ward and A&E, and a wider link corridor. |
+
+Version 2 adds:
+
+- Fire doors with physics: self-closing leaves, magnets that release on a fire alarm, and stair doors
+  that are never held open (HTM 05-02).
+- Bed lifts with call buttons, door timing, a light curtain and fire recall (HTM 08-02).
+- A main building in 3 fire compartments, with enclosed stairs and two final exits.
+- A 6-bed ward with en-suite rooms and a nurse base (HBN 04-01), and a small A&E with its own
+  ambulance entrance (HBN 15-01).
+- A 4 m link corridor between the hospital and the surgical wing (HBN 00-04).
+- An exterior drive, an A&E ambulance bay and patient-transport bays.
+
+Version 2 follows the guidance for robot testing. It is not a certified design. The file
+`hospital-sim-env/isaac/docs/uk-guidance-compliance.md` lists each check and the remaining gaps.
+
+To get version 2:
+
+```bash
+git clone --recurse-submodules -b v2 https://github.com/Bkrakshith/hospital-sim.git
+# or, with vcstool:
+vcs import < hospital-sim.repos   # on the v2 branch, the changed repos point to their v2 branches
+```
+
 ## What you can do with WardZero
 
 Use WardZero to do these tasks on your own computer:

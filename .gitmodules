@@ -1,21 +1,25 @@
 [submodule "hospital-sim-env"]
 	path = hospital-sim-env
 	url = https://github.com/Bkrakshith/hospital-sim-env.git
+	branch = v2
 [submodule "g1-brainco-description"]
 	path = g1-brainco-description
 	url = https://github.com/Bkrakshith/g1-brainco-description.git
 [submodule "g1-mujoco-sim"]
 	path = g1-mujoco-sim
 	url = https://github.com/Bkrakshith/g1-mujoco-sim.git
+	branch = v2
 [submodule "g1-isaac-sim"]
 	path = g1-isaac-sim
 	url = https://github.com/Bkrakshith/g1-isaac-sim.git
+	branch = v2
 [submodule "g1-whole-body-rl"]
 	path = g1-whole-body-rl
 	url = https://github.com/Bkrakshith/g1-whole-body-rl.git
 [submodule "ros2_ws/src/hospital-sim-ros2"]
 	path = ros2_ws/src/hospital-sim-ros2
 	url = https://github.com/Bkrakshith/hospital-sim-ros2.git
+	branch = v2
 [submodule "g1-webcam-teleop"]
 	path = g1-webcam-teleop
 	url = https://github.com/Bkrakshith/g1-webcam-teleop.git

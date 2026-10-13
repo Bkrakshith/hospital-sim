@@ -120,6 +120,49 @@ Perception / navigation (sim publishes these; on the real robot they come from t
 | `/joint_states` | `sensor_msgs/JointState` (29 body + 12 hand joints, from sim/controller) |
 | `/clock` | sim time (`use_sim_time:=true` for everything when running the sim) |
 
+Building fixtures (simulator only; MuJoCo `g1_mujoco_sim` and Isaac Sim publish the same names and types). Fire
+doors, bed lifts and lift buttons of the whole hospital (surgical wing and main building) move under one controller,
+`hospital-sim-env/fixtures/hospital_fixtures.py`. Joint and button names start with `fx_`. Topics use the short
+button name without `fx_`.
+
+| Name | Type | Notes |
+|---|---|---|
+| `/sim/fire_alarm` | `std_msgs/Bool` (subscribed) | `true`: one building-wide alarm. All magnets release, every fire door closes, all lifts of both banks go to fire recall (doors open, calls ignored). `false`: alarm reset; doors stay shut until `/sim/reset` |
+| `/sim/fixtures/press` | `std_msgs/String` (subscribed) | virtual button press, by short name (list below) |
+| `/sim/lift/call` | `std_srvs/Trigger` (service) | presses `LobbyCall` (wing bank, `Lift1`/`Lift2`). `success` is `false` while the fire alarm is on: the lifts are on fire recall and ignore the call (`message` gives the reason) |
+| `/sim/lift/call_main` | `std_srvs/Trigger` (service) | presses `MainCall` (main-building bank, `MainLift1`/`MainLift2`). `success` is `false` while the fire alarm is on, and at tier `wing` (the main bank is not built) |
+| `/sim/fixtures` | `std_msgs/String` JSON, 10 Hz (published) | `{"t", "fire_alarm", "doors": {name: {"rating", "leaves_deg", "closed", "held_open"}}, "lifts": {name: {"state", "door_gap_m", "reopens", "nudging", "dwell_left_s"}}, "events": [[t, text]]}` (`FixtureController.state_json`). `"doors"` has every fire door of the tier |
+
+Button names (`/sim/fixtures/press`): `LobbyCall`, `MainCall` (landing calls), `Lift1_Open`, `Lift1_Close`,
+`Lift2_Open`, `Lift2_Close`, `MainLift1_Open`, `MainLift1_Close`, `MainLift2_Open`, `MainLift2_Close` (car buttons).
+An unknown button name gives a warning in the log and no action. A robot hand can also press a button body
+physically. `/sim/reset` puts every fixture back to its initial state.
+
+**Fixture tiers.** One tier selects the fixtures of both simulators. Set it once for the scene build, the Isaac
+stage, the run and MuJoCo:
+
+| Where | How |
+|---|---|
+| scene build, Isaac stage, check tools | environment variable `HG1_FIXTURES=wing\|tier1\|tier2\|full` (not set: `tier2`) |
+| Isaac Sim | `./g1-isaac-sim/run.sh --fixtures TIER ...` (it exports `HG1_FIXTURES`); run `--stage` again after a change |
+| MuJoCo | sim node parameter `fixtures_tier` (`ros2 launch g1_bringup sim.launch.py fixtures_tier:=TIER`); empty = `HG1_FIXTURES`, else `tier2`. The node loads `g1-mujoco-sim/<world>_g1_<tier>.xml` |
+
+| Tier | Fire doors (keys of `"doors"`) | Lifts | Calls | Joints |
+|---|---|---|---|---|
+| `wing` | `Compartment` (FD60S, link), `CrossCorridor`, `LiftLobby`, `Store`, `ScrubStore`, `Theatre` (FD30S), `FinalExit` (`EXIT`) | `Lift1`, `Lift2` | `LobbyCall` | 23 |
+| `tier1` | + `W_Compartment`, `E_Compartment` (FD60S), `W_Stair`, `E_Stair` (FD30S, 1 leaf) | + `MainLift1`, `MainLift2` | + `MainCall` | 38 |
+| `tier2` (default) | + `Main_LiftLobby` (FD30S), `D07_Exit`, `D34_Exit` (`EXIT`) | same | same | 44 |
+| `full` | + 8 FD30S hazard-room doors, 1 leaf each: `AE_DirtyUtility`, `AE_CleanLinen`, `Central_Store`, `Pharmacy1`, `Pharmacy2`, `Ward_Cleaners`, `Ward_CleanLinen`, `Ward_DirtyUtility` | same | same | 52 |
+
+At reset, the magnets hold these doors open: `Compartment`, `CrossCorridor`, `LiftLobby`, `Theatre`,
+`W_Compartment`, `E_Compartment` and `Main_LiftLobby`. All other doors are kept shut. They close again by themselves
+after a push. The stair doors are never held open. "Locked shut" doors (`use` in the spec) are kept shut by the
+closer only; they have no lock. A door that the tier leaves out keeps the asset's own static leaves in its doorway, in
+both simulators. Below `tier2`, the main-entrance glass units stay closed.
+
+Isaac Sim only: `run_sim.py --fixture-control on|off` (default `on`) switches the fixture controller. With `off`,
+the fixtures stay as authored and nothing controls them (debug only).
+
 ### 3.2 Modes (`g1_interfaces/msg/Mode`)
 
 ```
