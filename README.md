@@ -33,6 +33,30 @@ Built by Rakshith Bangalore Kumaraswamy.
 > **Note:** WardZero is a simulation. Nothing in this repository has run on a physical robot or in a
 > real hospital.
 
+## Quick start (MuJoCo only, no GPU)
+
+The MuJoCo workload runs on a laptop without an NVIDIA GPU. On Ubuntu 22.04 with
+[ROS 2 Humble](https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debs.html) installed:
+
+```bash
+sudo apt install ros-humble-navigation2 ros-humble-nav2-bringup ros-humble-slam-toolbox \
+  ros-humble-rmw-cyclonedds-cpp python3-colcon-common-extensions python3-vcstool python3-venv git
+git clone --recurse-submodules https://github.com/Bkrakshith/hospital-sim.git WardZero && cd WardZero
+python3 -m venv --system-site-packages .venv && source env.sh
+for r in g1-brainco-description g1-mujoco-sim ros2_ws/src/hospital-sim-ros2 g1-webcam-teleop hospital-sim-env; do
+  [ -f "$r/requirements.txt" ] && .venv/bin/pip install -r "$r/requirements.txt"
+done
+(cd ros2_ws && colcon build --symlink-install) && source env.sh
+ros2 launch g1_bringup sim.launch.py viewer:=true     # the G1 in the MuJoCo hospital
+```
+
+Then in a second terminal: `source env.sh && ros2 run g1_teleop_keyboard keyboard_node` and press `r`
+to stand, `l` to switch to walking, then `w` to walk forward. Isaac Sim and controller training are optional and need a GPU; see
+[Install](#install-wardzero-on-your-computer).
+
+**Have a different robot?** Keep the hospital and the ROS 2 stack and swap the `g1-*` repositories.
+See [Add your own robot](#add-your-own-robot).
+
 ## What you can do with WardZero
 
 Use WardZero to do these tasks on your own computer:

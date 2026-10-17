@@ -231,7 +231,7 @@ Rules:
 ```
 `g1_controller` must build the observation from the sidecar only (no hard-coded layout). Until a
 trained policy exists it runs a **placeholder**: Unitree's pre-trained G1 12-DoF locomotion policy
-(`~/ntu_dev/unitree_rl_gym/deploy/pre_train/g1/motion.pt`, converted to ONNX + sidecar with
+(`deploy/pre_train/g1/motion.pt` from [unitree_rl_gym](https://github.com/unitreerobotics/unitree_rl_gym), converted to ONNX + sidecar with
 `"placeholder": true`), with waist/arms held by PD at the default or `/g1/upper_body_target`.
 
 ## 5. Ports
