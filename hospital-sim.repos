@@ -35,3 +35,7 @@ repositories:
     type: git
     url: https://github.com/Bkrakshith/hospital-sim-ui.git
     version: main
+  hospital-sim-agents:
+    type: git
+    url: https://github.com/Bkrakshith/hospital-sim-agents.git
+    version: v3

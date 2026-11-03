@@ -1,0 +1,956 @@
+<title>WardZero Persona Agents</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Barlow+Condensed:wght@500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: a wayfinding-sign document. Condensed sign-plate headings, a sticky route index on wide screens,
+   one reading column, wide diagrams scroll in their own frames. */
+:root {
+  --bg: #f6f8f8;
+  --surface: #ffffff;
+  --ink: #12262b;
+  --muted: #4f6469;
+  --line: #d3dddf;
+  --plate: #0f4c5c;        /* wayfinding sign plate (deep teal) */
+  --plate-ink: #f4fbfb;
+  --accent: #c76a00;       /* signage amber */
+  --accent-soft: #fbeedd;
+  --must: #0f6b4a; --must-bg: #dff3ea;
+  --should: #8a5a00; --should-bg: #fcefd6;
+  --could: #4a5a8a; --could-bg: #e5e9f6;
+  --risk: #a1322c; --risk-bg: #f8e2e0;
+  --code-bg: #eef3f4;
+  --f-display: "Barlow Condensed", "Arial Narrow", "Roboto Condensed", sans-serif;
+  --f-body: "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --step--1: 0.875rem; --step-0: 1.0625rem; --step-1: 1.3rem; --step-2: 1.75rem; --step-3: 2.6rem;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0d1719; --surface: #132124; --ink: #e3eced; --muted: #9db0b4; --line: #26393d;
+    --plate: #1f6a7c; --plate-ink: #f4fbfb; --accent: #f0a14a; --accent-soft: #3a2a14;
+    --must: #6fd3a8; --must-bg: #143327; --should: #f0c060; --should-bg: #3a2e12;
+    --could: #a9b8ef; --could-bg: #1f2640; --risk: #f19a92; --risk-bg: #3d1b19; --code-bg: #182a2e;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0d1719; --surface: #132124; --ink: #e3eced; --muted: #9db0b4; --line: #26393d;
+  --plate: #1f6a7c; --plate-ink: #f4fbfb; --accent: #f0a14a; --accent-soft: #3a2a14;
+  --must: #6fd3a8; --must-bg: #143327; --should: #f0c060; --should-bg: #3a2e12;
+  --could: #a9b8ef; --could-bg: #1f2640; --risk: #f19a92; --risk-bg: #3d1b19; --code-bg: #182a2e;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: var(--step-0); line-height: 1.6;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0 4rem;
+}
+.shell { max-width: 1240px; margin: 0 auto; display: grid; grid-template-columns: 230px minmax(0, 1fr); gap: 3rem; }
+@media (max-width: 900px) { .shell { grid-template-columns: minmax(0, 1fr); gap: 0; } nav.index { display: none; } }
+main { min-width: 0; max-width: 860px; }
+header.top { padding-block: 2.5rem 1.5rem; border-bottom: 3px solid var(--plate); margin-bottom: 1rem; }
+.eyebrow { font-family: var(--f-mono); font-size: var(--step--1); color: var(--muted); letter-spacing: 0.04em; }
+h1 { font-family: var(--f-display); font-weight: 700; font-size: var(--step-3); line-height: 1.05; margin: 0.4rem 0 0.8rem; text-wrap: balance; letter-spacing: 0.01em; }
+.lede { font-size: var(--step-1); line-height: 1.45; color: var(--ink); max-width: 62ch; margin: 0; }
+.meta { display: flex; flex-wrap: wrap; gap: 0.5rem 1.25rem; margin-top: 1.25rem; font-size: var(--step--1); color: var(--muted); }
+.meta b { color: var(--ink); font-weight: 700; }
+section { padding-block: 1.5rem 0.5rem; scroll-margin-top: 1rem; }
+h2 {
+  display: flex; align-items: stretch; gap: 0; margin: 1.5rem 0 1rem; font-family: var(--f-display); font-weight: 600;
+  font-size: var(--step-2); line-height: 1.1; text-wrap: balance;
+}
+h2 .plate { background: var(--plate); color: var(--plate-ink); padding: 0.35rem 0.75rem; letter-spacing: 0.02em; }
+h2 .code { background: var(--accent); color: #1b1004; padding: 0.35rem 0.6rem; font-family: var(--f-mono); font-size: 0.9rem; font-weight: 600; display: flex; align-items: center; }
+h3 { font-family: var(--f-display); font-weight: 600; font-size: var(--step-1); letter-spacing: 0.02em; margin: 1.6rem 0 0.5rem; text-wrap: balance; }
+p, ul, ol { max-width: 68ch; }
+li { margin-block: 0.25rem; }
+code, .mono { font-family: var(--f-mono); font-size: 0.86em; background: var(--code-bg); padding: 0.05em 0.35em; border-radius: 3px; overflow-wrap: anywhere; }
+a { color: var(--plate); }
+:root:not([data-theme="light"]) a { color: inherit; }
+a:focus-visible, summary:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+nav.index { position: sticky; top: env(safe-area-inset-top, 0px); align-self: start; padding-top: 2.6rem; max-height: 100vh; overflow-y: auto; }
+nav.index .eyebrow { display: block; margin-bottom: 0.6rem; text-transform: uppercase; letter-spacing: 0.1em; }
+nav.index ol { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.15rem; font-size: var(--step--1); }
+nav.index a { display: grid; grid-template-columns: 2.2rem 1fr; gap: 0.4rem; text-decoration: none; color: var(--ink); padding: 0.25rem 0.4rem; border-left: 3px solid transparent; }
+nav.index a:hover { border-left-color: var(--accent); background: var(--surface); }
+nav.index a span { font-family: var(--f-mono); color: var(--muted); }
+.table-wrap { overflow-x: auto; margin: 0.8rem 0 1.2rem; border: 1px solid var(--line); background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: var(--step--1); }
+th, td { text-align: left; vertical-align: top; padding: 0.55rem 0.7rem; border-bottom: 1px solid var(--line); }
+th { font-family: var(--f-display); font-weight: 600; font-size: 1rem; letter-spacing: 0.03em; background: var(--code-bg); }
+tr:last-child td { border-bottom: 0; }
+td.id { font-family: var(--f-mono); white-space: nowrap; color: var(--muted); }
+.pill { display: inline-block; font-family: var(--f-mono); font-size: 0.75rem; font-weight: 600; padding: 0.1rem 0.45rem; border-radius: 999px; white-space: nowrap; }
+.must { color: var(--must); background: var(--must-bg); }
+.should { color: var(--should); background: var(--should-bg); }
+.could { color: var(--could); background: var(--could-bg); }
+.risk { color: var(--risk); background: var(--risk-bg); }
+.diagram { margin: 0.8rem 0 0.4rem; background: var(--surface); border: 1px solid var(--line); overflow-x: auto; padding: 1rem; }
+.diagram pre.mermaid { margin: 0; min-width: 640px; background: transparent; font-family: var(--f-mono); font-size: 0.8rem; }
+.caption { font-size: var(--step--1); color: var(--muted); margin: 0.3rem 0 1.4rem; max-width: 72ch; }
+.callout { border-left: 4px solid var(--accent); background: var(--accent-soft); padding: 0.8rem 1rem; margin: 1rem 0; max-width: 72ch; }
+.callout p { margin: 0.2rem 0; }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin: 1rem 0; }
+.panel { background: var(--surface); border: 1px solid var(--line); padding: 0.9rem 1rem; min-width: 0; }
+.panel h4 { margin: 0 0 0.4rem; font-family: var(--f-display); font-weight: 600; font-size: 1.1rem; letter-spacing: 0.03em; }
+.panel ul { padding-left: 1.1rem; margin: 0; }
+.verdict { display: grid; grid-template-columns: 7.5rem minmax(0, 1fr); gap: 0.4rem 1rem; align-items: baseline; margin: 0.8rem 0; }
+@media (max-width: 520px) { .verdict { grid-template-columns: minmax(0, 1fr); } }
+.phase { border: 1px solid var(--line); background: var(--surface); margin: 1rem 0; }
+.phase > .ph { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; align-items: baseline; padding: 0.6rem 1rem; background: var(--code-bg); border-bottom: 1px solid var(--line); }
+.phase > .ph b { font-family: var(--f-display); font-size: 1.25rem; font-weight: 600; letter-spacing: 0.02em; }
+.phase > .ph .tag { font-family: var(--f-mono); font-size: 0.8rem; color: var(--muted); }
+.phase > .pb { padding: 0.4rem 1rem 0.8rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 0.5rem 1.5rem; }
+.phase > .pb > div { min-width: 0; }
+.phase h5 { margin: 0.6rem 0 0.2rem; font-size: var(--step--1); text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+.phase ul { padding-left: 1.1rem; margin: 0; font-size: var(--step--1); }
+details { border: 1px solid var(--line); background: var(--surface); padding: 0.5rem 0.9rem; margin: 0.6rem 0; }
+summary { cursor: pointer; font-weight: 700; }
+footer { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--line); font-size: var(--step--1); color: var(--muted); }
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+html { scroll-behavior: smooth; }
+</style>
+
+<div class="shell">
+<nav class="index" aria-label="Contents">
+  <span class="eyebrow">Route index</span>
+  <ol>
+    <li><a href="#summary"><span>01</span>Summary</a></li>
+    <li><a href="#problem"><span>02</span>Problem and users</a></li>
+    <li><a href="#goals"><span>03</span>Goals and limits</a></li>
+    <li><a href="#scope"><span>04</span>Version 1 scope</a></li>
+    <li><a href="#storyboard"><span>05</span>Storyboard and control</a></li>
+    <li><a href="#requirements"><span>06</span>Requirements</a></li>
+    <li><a href="#architecture"><span>07</span>Architecture</a></li>
+    <li><a href="#mind"><span>08</span>Mind and memory</a></li>
+    <li><a href="#models"><span>09</span>Models and cost</a></li>
+    <li><a href="#security"><span>10</span>Keys and security</a></li>
+    <li><a href="#review"><span>11</span>Strategy review</a></li>
+    <li><a href="#roadmap"><span>12</span>Roadmap</a></li>
+    <li><a href="#open"><span>13</span>Open questions</a></li>
+    <li><a href="#decisions"><span>14</span>Decision log</a></li>
+    <li><a href="#glossary"><span>15</span>Glossary</a></li>
+  </ol>
+</nav>
+
+<main>
+<header class="top">
+  <div class="eyebrow">WardZero · Product requirements and roadmap · draft 3 · 3 Nov 2026</div>
+  <h1>WardZero Persona Agents</h1>
+  <p class="lede">Simulated hospital visitors and patients who have a body, a persona and a memory. They live in the Isaac Sim hospital beside a Unitree G1, react to what it says and does, and give us a repeatable way to test the robot on tasks we have not written yet.</p>
+  <div class="meta">
+    <span><b>Status</b> draft, awaiting approval</span>
+    <span><b>Version in scope</b> v1 (waiting area, 5 people)</span>
+    <span><b>Target hardware</b> RTX 5090 32 GB (dev on RTX 3070 8 GB)</span>
+    <span><b>Robot middleware</b> ROS 2 Humble, CycloneDDS</span>
+    <span><b>Design spec</b> <code>docs/design/2026-11-03-human-persona-agents-design.md</code></span>
+  </div>
+</header>
+
+<section id="summary">
+  <h2><span class="code">01</span><span class="plate">Summary</span></h2>
+  <p>Each simulated person has three layers. A <b>mind</b> is a LangGraph agent on Claude or OpenAI that decides what to do next from the person's persona, what they see and hear, and what they remember. <b>Reflexes</b> are fast rules with no AI that keep the person alive between decisions: coughing, fidgeting, turning towards a voice. The <b>body</b> is a physically simulated SOMA-23 human that follows the chosen behaviour with real balance and contact, using the chair-trained tracker we already have.</p>
+  <p>ROS 2 connects the people to the robot. The robot never reads the people's minds. It hears and sees them only as its own sensors would, so any G1 task can be tested against the same crowd.</p>
+  <p>On launch, a <b>storyboard</b> starts the hospital day. A <b>scenario control panel</b> then lets the experimenter throw scenarios at the robot while the run is going: a coughing fit, a lost visitor, a name called, a fire alarm. The people play these out in character, and the robot has to respond.</p>
+  <p>Version 1 covers the main-entrance waiting area with five people, two of whom are coughing patients. It runs for up to an hour. Personas and scenarios live in files. Memory grows over time and can be reset or restored. Every run can be replayed exactly without calling an AI model again.</p>
+</section>
+
+<section id="problem">
+  <h2><span class="code">02</span><span class="plate">Problem and users</span></h2>
+  <p>Our scripted reception film (UC2) proved that physics humans work in the hospital: seated hip error is now 0.003–0.051 m, with no falls. But a script fixes every movement in advance. It cannot answer when the robot says something new, it does not scale to an hour, and it cannot test robot tasks nobody has scripted.</p>
+  <div class="grid2">
+    <div class="panel"><h4>HRI researcher</h4><ul><li>Runs studies with controlled, varied, believable people.</li><li>Needs repeatable runs, known starting memory and a record of why each person acted.</li></ul></div>
+    <div class="panel"><h4>Robot developer</h4><ul><li>Tests a new G1 behaviour (speech, navigation, assistance) against a live room.</li><li>Needs the same crowd for every build, replay with no API cost, and only real sensor data reaching the robot.</li></ul></div>
+    <div class="panel"><h4>Scenario author</h4><ul><li>Adds personas and scenarios by editing files, citing the research notes.</li><li>Needs clear schemas and validation errors in plain words.</li></ul></div>
+    <div class="panel"><h4>New user of the repo</h4><ul><li>Brings their own Claude or OpenAI account.</li><li>Needs a README that gets the services running and keeps their key safe.</li></ul></div>
+  </div>
+</section>
+
+<section id="goals">
+  <h2><span class="code">03</span><span class="plate">Goals, non-goals, anti-goals</span></h2>
+  <h3>Goals</h3>
+  <ol>
+    <li>Five physics people sit, cough, fidget, look around, use phones, read signs, stand, walk and talk in the waiting area for up to an hour. They don't fall or pass through walls and chairs.</li>
+    <li>Decisions follow each persona and the UK research notes, and change when the robot speaks or acts nearby.</li>
+    <li>Every aspect of the people is configurable from files.</li>
+    <li>Memory builds up within and across runs, with reset and snapshots.</li>
+    <li>Each user runs on their own Claude or OpenAI account, with keys stored securely. Nothing runs without a key.</li>
+    <li>A storyboard starts on launch, and a control panel lets the experimenter throw scenarios at the robot during the run.</li>
+    <li>Two perception modes are chosen at launch, each with README setup steps.</li>
+    <li>It runs comfortably on one RTX 5090 in the long term.</li>
+  </ol>
+  <div class="grid2">
+    <div class="panel"><h4>Non-goals for v1</h4><ul><li>Benchmarking or scoring the G1 (moved to v2).</li><li>A configuration screen (v2).</li><li>Areas beyond the waiting area; crowds larger than 5.</li><li>Live photoreal rendering (we render spans from the recording instead).</li><li>Getting up from the floor after a fall (respawn instead).</li></ul></div>
+    <div class="panel"><h4>Anti-goals (failure even if it works)</h4><ul><li>People who freeze or glitch while waiting for an AI reply.</li><li>Behaviour that depends on robot internals or hidden topics.</li><li>API keys in git, logs, ROS parameters, topics or recordings.</li><li>A run that cannot be repeated exactly.</li></ul></div>
+  </div>
+</section>
+
+<section id="scope">
+  <h2><span class="code">04</span><span class="plate">Version 1 scope: the waiting area</span></h2>
+  <p>The setting is the main-entrance waiting area of the WardZero hospital. It uses the existing lobby chair rows, which were measured from the mesh and rescaled to a 0.45 m seat with fabric and wood friction, and the baked hospital collision world of 2,571 meshes. The G1 runs its normal ROS 2 stack and does whatever task it is being tested on.</p>
+  <div class="table-wrap"><table>
+    <thead><tr><th>#</th><th>Persona</th><th>Behaviour sketch</th><th>Grounding in the research</th></tr></thead>
+    <tbody>
+      <tr><td class="id">P1</td><td>Coughing patient A</td><td>Adult, persistent cough, waits seated, sometimes checks phone, coughs into elbow</td><td>Cough is a top-20 A&amp;E chief complaint (about 436k a year, ECDS 2024-25)</td></tr>
+      <tr><td class="id">P2</td><td>Coughing patient B</td><td>Older adult, cough with breathlessness, slow sit-to-stand, relies on P3</td><td>Older patients have longer waits and lower mobility (patient personas, mobility notes)</td></tr>
+      <tr><td class="id">P3</td><td>Companion of P2</td><td>Relative who speaks for P2, asks staff or the robot questions</td><td>About 35% of adult outpatients come with someone, about 50% of over-65s (a low-confidence estimate)</td></tr>
+      <tr><td class="id">P4</td><td>Older outpatient with a walking stick</td><td>Reduced hearing, slow, may mishear the robot</td><td>Mobility aids and movement notes</td></tr>
+      <tr><td class="id">P5</td><td>Anxious first-time patient</td><td>Reads signs, checks the time, likely to approach the robot</td><td>Satisfaction falls after 30–45 min unexplained waits (Healthwatch audits)</td></tr>
+    </tbody>
+  </table></div>
+  <p class="caption">P1 and P2 come from the user's brief. P3–P5 are proposals and still need confirming. All five are instances of personas in <code>config/personas.yaml</code>, so different seeds give different people.</p>
+</section>
+
+<section id="storyboard">
+  <h2><span class="code">05</span><span class="plate">Storyboard and scenario control</span></h2>
+  <p>A run is not just people waiting. When WardZero launches, a <b>storyboard</b> starts: a timed sequence of beats that gives the hour its shape. While it runs, the experimenter uses the <b>scenario control panel</b> to fire extra <b>scenario cards</b>. Each card is a ready-made situation that tests how the robot responds. The people act out every beat and card through their own minds, so the same card plays out differently with different personas and seeds.</p>
+
+  <h3>5.1 How a scenario reaches the scene</h3>
+  <div class="diagram"><pre class="mermaid">
+flowchart LR
+  subgraph AUTH["Authoring · files"]
+    SBF["storyboards/*.yaml&lt;br/&gt;beats on a timeline"]
+    CARDS["cards/*.yaml&lt;br/&gt;scenario library"]
+  end
+  subgraph CTRL["Experimenter"]
+    PANEL["Scenario control panel&lt;br/&gt;browser, local"]
+  end
+  DIR["Scenario director&lt;br/&gt;ROS 2 node&lt;br/&gt;timeline · triggers · seeded random"]
+  SBF --> DIR
+  CARDS --> DIR
+  PANEL &lt;--&gt;|"fire card · pause · live state"| DIR
+  DIR -- "nudge: goal or feeling" --> MINDS["People's minds&lt;br/&gt;decide how to act"]
+  DIR -- "reflex override: coughing fit" --> REFL["Reflexes"]
+  DIR -- "world event: PA call, alarm,&lt;br/&gt;wet-floor sign, arrival, exit" --> SIMW["Sim host world"]
+  MINDS --> BODIES["Bodies act in the scene"]
+  REFL --> BODIES
+  SIMW --> BODIES
+  BODIES -- "only what its sensors and microphones pick up" --> ROBOT["G1 stack"]
+  DIR -. "never addressed directly" .-> ROBOT
+  </pre></div>
+  <p class="caption">Cards work through three channels: nudging a person's mind, overriding a reflex, or changing the world. None of them tell the robot anything. The robot only meets the consequences, as it would in a real hospital.</p>
+
+  <h3>5.2 Storyboard</h3>
+  <ul>
+    <li><b>Starts on launch.</b> <code>hhumans run</code> loads the scenario's storyboard and plays it from t = 0.</li>
+    <li><b>Beats</b> fire at a time ("t+05:00"), on a condition ("robot within 2 m of P5", "P2 has waited 20 min"), or when the previous beat ends.</li>
+    <li><b>Chaos mode</b> (optional) draws random cards at a set rate from a weighted deck, using the run seed. Two runs with the same seed get the same cards at the same times.</li>
+    <li>Every beat and card firing goes into the run folder: who fired it, when, and with what parameters. That keeps the run replayable.</li>
+  </ul>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Time</th><th>Beat in the default waiting-area storyboard (proposal)</th></tr></thead>
+    <tbody>
+      <tr><td class="id">t+00:00</td><td>The waiting area opens with 5 people seated. P1 and P2 cough at their persona rates.</td></tr>
+      <tr><td class="id">t+05:00</td><td>PA announcement: clinics are running 30 minutes late.</td></tr>
+      <tr><td class="id">t+08:00</td><td>A ward visitor arrives looking for a relative on Ward B.</td></tr>
+      <tr><td class="id">t+12:00</td><td>P5 cannot find clinic 3 on the signs and looks for help.</td></tr>
+      <tr><td class="id">t+20:00</td><td>A nurse calls P1 by name, and P1 leaves for the clinic corridor.</td></tr>
+      <tr><td class="id">t+25:00</td><td>P4, who is hard of hearing, asks where the toilets are.</td></tr>
+      <tr><td class="id">t+35:00</td><td>P2 has a coughing fit. P3 looks for help.</td></tr>
+      <tr><td class="id">t+45:00</td><td>P3 wants to step out and looks for the way out.</td></tr>
+      <tr><td class="id">after 50 min wait</td><td>P4's patience runs out and P4 asks how much longer.</td></tr>
+      <tr><td class="id">t+60:00</td><td>End of run, with a memory snapshot saved.</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>5.3 Scenario cards (starter deck, proposals; v1 centres on people asking for directions)</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Card</th><th>Channel</th><th>What happens</th><th>What it tests in the robot</th></tr></thead>
+    <tbody>
+      <tr><td>Lost visitor</td><td>nudge</td><td>A person can't find a clinic and walks up to the robot</td><td>Giving directions, pointing, checking it was understood</td></tr>
+      <tr><td>Coughing fit</td><td>reflex + nudge</td><td>A patient coughs hard and long, and the companion asks for help</td><td>Noticing distress, keeping distance, offering a mask, calling staff</td></tr>
+      <tr><td>Hard of hearing</td><td>nudge</td><td>P4 mishears the robot and asks again, louder</td><td>Repeating, speaking up, using gestures</td></tr>
+      <tr><td>Name called</td><td>world</td><td>A PA or nurse calls a patient, who gets up and leaves</td><td>Making way, not blocking routes</td></tr>
+      <tr><td>Impatient patient</td><td>nudge</td><td>Someone's patience runs out and they complain to the robot</td><td>De-escalation, honest answers, handing over to staff</td></tr>
+      <tr><td>Blocked path</td><td>nudge</td><td>A person stands or puts a bag in the robot's route</td><td>Polite route negotiation, safe stopping</td></tr>
+      <tr><td>Wet floor</td><td>world</td><td>A spill and a wet-floor sign appear</td><td>Route change, warning people</td></tr>
+      <tr><td>New arrival</td><td>world</td><td>A new person enters (persona chosen from the deck)</td><td>Greeting, directing to reception or a seat</td></tr>
+      <tr><td>Ward visitor</td><td>world + persona</td><td>A visitor arrives looking for a relative on Ward B</td><td>Directions to the wards, lifts and doors; checking it was understood</td></tr>
+      <tr><td>Toilet request</td><td>nudge</td><td>Someone can't see a sign for the toilets and looks for help</td><td>Short directions, pointing, signs</td></tr>
+      <tr><td>Way out</td><td>nudge</td><td>Someone wants to leave and can't find the exit</td><td>Directions to the entrance, making way</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>5.4 Scenario control panel</h3>
+  <div class="grid2">
+    <div class="panel"><h4>What the panel shows</h4><ul><li>The storyboard timeline, with the current beat and the next ones</li><li>A floor map with each person's position, posture and mood</li><li>Each person's last decision, its reason, and their last words</li><li>An event log of beats, cards, speech and falls</li><li>A cost meter and the recording status</li></ul></div>
+    <div class="panel"><h4>What the panel does</h4><ul><li>Start, pause, resume, stop and reset the run</li><li>Fire any card now, choosing the target person and parameters</li><li>Turn chaos mode on or off and set its rate</li><li>Skip or re-run a storyboard beat</li><li>Save a memory snapshot</li></ul></div>
+  </div>
+  <p class="caption">The panel is for the experimenter. It can see inside the people's minds, which the robot never can. It runs locally in a browser, served by the scenario director, and every action it takes goes into the run folder. Editing personas and cards in the panel waits for v2. In v1, cards and storyboards are YAML files.</p>
+
+  <h3>5.5 Firing a card</h3>
+  <div class="diagram"><pre class="mermaid">
+sequenceDiagram
+  autonumber
+  participant E as Experimenter (panel)
+  participant D as Scenario director
+  participant M as Mind (P2, P3)
+  participant S as Sim host
+  participant G as G1 stack
+  E->>D: fire "Coughing fit" on P2, severity high
+  D->>D: record card, time, parameters
+  D->>S: reflex override P2: cough bout 40 s
+  D->>M: nudge P3: "P2 is struggling to breathe, get help"
+  S->>G: /sim/audio/events coughs (P2), loud
+  M->>S: P3 intent approach(robot), say "Excuse me, can you get a nurse?"
+  S->>G: /sim/audio/events P3 speech
+  G->>S: /g1/speech/say "I'll call a nurse now. Please keep them sitting upright."
+  S->>M: P3 hears the robot, decides next step
+  D->>E: live state and event log
+  </pre></div>
+</section>
+
+<section id="requirements">
+  <h2><span class="code">06</span><span class="plate">Requirements</span></h2>
+  <p><span class="pill must">MUST</span> v1 cannot ship without it. <span class="pill should">SHOULD</span> v1 aims for it. <span class="pill could">COULD</span> v1 does it only if it's cheap.</p>
+  <h3>Functional</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>ID</th><th>Requirement</th><th>Priority</th><th>Acceptance test</th></tr></thead>
+    <tbody>
+      <tr><td class="id">FR-1</td><td>Spawn the people listed in a scenario file, each in their seat or at their arrival point and time</td><td><span class="pill must">MUST</span></td><td>The waiting-area scenario starts 5 people. The roster topic lists them with persona and seat.</td></tr>
+      <tr><td class="id">FR-2</td><td>Bodies are physical: SOMA tracker, hospital collision, chairs with friction</td><td><span class="pill must">MUST</span></td><td>No hips, chest or head inside walls (<code>check_penetration.py</code>). Seated hip offset under 0.08 m.</td></tr>
+      <tr><td class="id">FR-3</td><td>Intent vocabulary for the waiting area (sit, phone, fidget, look, read sign, stand, sit down, walk, approach, wait, talk, gesture, cough, leave), with completion status</td><td><span class="pill must">MUST</span></td><td>Each intent runs from seated and standing starts. Status reports done or failed with a reason.</td></tr>
+      <tr><td class="id">FR-4</td><td>Motion composer stitches clips from the person's current physical state, adding head and cough overlays</td><td><span class="pill must">MUST</span></td><td>Spike S1: a streaming motion source serves each person a rolling reference window, and random intent switches give under 1 fall per person-hour.</td></tr>
+      <tr><td class="id">FR-5</td><td>Reflex layer: cough schedule from the persona, fidget, gaze towards a voice. No AI involved.</td><td><span class="pill must">MUST</span></td><td>Measured cough rate is within ±20% of the persona's setting. Reflexes keep running when the AI provider is unreachable.</td></tr>
+      <tr><td class="id">FR-6</td><td>One LangGraph agent per person: observe, recall, decide, act, remember. The decision is triggered by events, and the output is checked against a schema.</td><td><span class="pill must">MUST</span></td><td>When the robot speaks to P5, P5 answers within 3 s (median) with words that fit the persona.</td></tr>
+      <tr><td class="id">FR-7</td><td>Oracle perception: view cone with line of sight, signs and their text, speech and coughs within earshot (with hearing loss)</td><td><span class="pill must">MUST</span></td><td>A person behind a pillar does not see the robot. P4 sometimes mishears quiet speech.</td></tr>
+      <tr><td class="id">FR-8</td><td>Full perception: a head camera per person read by a vision model, scene audio through local speech-to-text, robot speech through text-to-speech</td><td><span class="pill should">SHOULD</span></td><td>The same scenario runs in full mode on the RTX 5090. P5 reads the sign text from the camera image.</td></tr>
+      <tr><td class="id">FR-9</td><td>Robot speech on <code>/g1/speech/say</code> becomes a sound source at the robot's head. People's speech reaches the robot as audio events.</td><td><span class="pill must">MUST</span></td><td>Robot speech is heard within earshot only. The robot receives P3's question on <code>/sim/audio/events</code>.</td></tr>
+      <tr><td class="id">FR-10</td><td>Persona file and scenario file, checked against a schema, with errors that name the field and the fix</td><td><span class="pill must">MUST</span></td><td>A wrong field type stops start-up with a one-line message.</td></tr>
+      <tr><td class="id">FR-11</td><td>Shared knowledge base built from <code>research_notes/</code>, keeping the source links, plus the hospital map and sign registry</td><td><span class="pill must">MUST</span></td><td><code>hhumans kb build</code> indexes every note. Retrieved snippets carry their source link.</td></tr>
+      <tr><td class="id">FR-12</td><td>Short-term memory per run; long-term memory per person across runs</td><td><span class="pill must">MUST</span></td><td>A second run with the same seed: P5 recalls the robot's earlier directions.</td></tr>
+      <tr><td class="id">FR-13</td><td>Memory reset (per person, per persona, everyone) and named snapshots</td><td><span class="pill must">MUST</span></td><td>Resetting then running gives the same first decision as a fresh install, given the same seed and recorded replies.</td></tr>
+      <tr><td class="id">FR-14</td><td>Run folder records configs, seeds, model IDs, memory snapshot in and out, every prompt, reply and intent, body states and audio events</td><td><span class="pill must">MUST</span></td><td>The folder alone is enough to replay the run.</td></tr>
+      <tr><td class="id">FR-15</td><td>Re-run modes:<ul><li><code>replay --exact</code>: recorded states</li><li><code>replay --intents</code>: recorded people open loop against a new robot build</li><li><code>rerun</code>: same start state with live minds</li></ul></td><td><span class="pill must">MUST</span></td><td>Exact replay matches the recording on the same machine and build (GPU PhysX is deterministic only there). Which modes v1 needs is Q3.</td></tr>
+      <tr><td class="id">FR-16</td><td>Choice of Claude or OpenAI, and model per role, set in the scenario file</td><td><span class="pill must">MUST</span></td><td>The same scenario runs on both providers without code changes.</td></tr>
+      <tr><td class="id">FR-17</td><td>Run control: start, pause, stop, reset, through a ROS service, the command line and the control panel</td><td><span class="pill must">MUST</span></td><td>Pause freezes both the bodies and the agents. Resume continues.</td></tr>
+      <tr><td class="id">FR-18</td><td>Fall handling: report the fall, tell the agent, respawn standing after a delay</td><td><span class="pill should">SHOULD</span></td><td>A forced fall gets a status, a memory entry and a respawn.</td></tr>
+      <tr><td class="id">FR-20</td><td>The robot's sensors see the people: their bodies are in the lidar ray-cast and the head-camera render</td><td><span class="pill must">MUST</span></td><td>A person standing in front of the G1 shows in <code>/scan</code> and in the head camera.</td></tr>
+      <tr><td class="id">FR-21</td><td>A storyboard starts on launch: beats triggered by time, condition or the end of the previous beat</td><td><span class="pill must">MUST</span></td><td>The default waiting-area storyboard plays its beats at the right times in an hour-long run.</td></tr>
+      <tr><td class="id">FR-22</td><td>Scenario cards as YAML, each acting through a mind nudge, a reflex override or a world event</td><td><span class="pill must">MUST</span></td><td>The starter deck (section 05) loads, and each card plays out in a test run with a video.</td></tr>
+      <tr><td class="id">FR-23</td><td>Scenario control panel: timeline, floor map, cast state, event log, fire card, chaos mode, cost meter</td><td><span class="pill must">MUST</span></td><td>An experimenter fires "Coughing fit" from the browser, and P2 and P3 react within seconds.</td></tr>
+      <tr><td class="id">FR-24</td><td>Chaos mode: random cards from a weighted deck, using the run seed</td><td><span class="pill should">SHOULD</span></td><td>The same seed gives the same cards at the same times.</td></tr>
+      <tr><td class="id">FR-25</td><td>Every beat and card firing (who, when, parameters) is recorded and replayed</td><td><span class="pill must">MUST</span></td><td><code>replay --exact</code> reproduces cards fired by hand from the panel.</td></tr>
+      <tr><td class="id">FR-19</td><td>Render chosen spans of a run with the existing photoreal pipeline</td><td><span class="pill could">COULD</span></td><td><code>render_recording.py</code> accepts a v1 run folder.</td></tr>
+    </tbody>
+  </table></div>
+  <h3>Non-functional</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>ID</th><th>Requirement</th><th>Target</th></tr></thead>
+    <tbody>
+      <tr><td class="id">NFR-1</td><td>Real-time running</td><td>Full mode holds real time on the RTX 5090. On the RTX 3070 the research estimates a real-time factor of 0.5–0.8 at 600 Hz, so it runs on sim time with <code>--lockstep</code>, so the hardware changes speed but not behaviour. The user accepted slower than real time on the 3070 (3 Nov).</td></tr>
+      <tr><td class="id">NFR-2</td><td>Responsiveness</td><td>A reflex reaction (head turns to the speaker) within 0.5 s. Spoken reply: median under 3 s as the target, measured per model in phase 1. The body never stalls.</td></tr>
+      <tr><td class="id">NFR-3</td><td>Memory safety</td><td>Every sim process runs under the capped launcher. Host RAM stays under 44 GB.</td></tr>
+      <tr><td class="id">NFR-4</td><td>Reproducibility</td><td>Same seed and recorded replies give the same run.</td></tr>
+      <tr><td class="id">NFR-5</td><td>Cost visibility</td><td>Tokens and estimated cost are logged per person and per run. The scenario file holds a budget cap that stops new AI calls (the bodies continue).</td></tr>
+      <tr><td class="id">NFR-6</td><td>Security</td><td>No secret in git, logs, ROS or the run folder. A pre-commit secret scan runs. See section 10.</td></tr>
+      <tr><td class="id">NFR-7</td><td>Licences</td><td>BONES-SEED and derived clips stay local. No SMPL models. Research notes keep their citations.</td></tr>
+      <tr><td class="id">NFR-9</td><td>Independent of any one server</td><td>Every model, motion clip and asset is fetched by repo scripts from its original source, using the user's own accounts and licences. Licensed data is never committed.</td></tr>
+      <tr><td class="id">NFR-8</td><td>Fairness to the robot</td><td>No G1-stack node subscribes to <code>/humans/*</code>. A launch check warns if one does.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="architecture">
+  <h2><span class="code">07</span><span class="plate">Architecture</span></h2>
+
+  <h3>7.1 System context</h3>
+  <div class="diagram"><pre class="mermaid">
+flowchart LR
+  subgraph USER["Researcher workstation"]
+    CLI["hhumans CLI&lt;br/&gt;run · replay · memory · kb · keys"]
+    CFG["config/&lt;br/&gt;personas.yaml · scenarios/*.yaml · signs.yaml"]
+    KR[("OS keyring or&lt;br/&gt;ant OAuth profile")]
+    PANEL["Scenario control panel&lt;br/&gt;browser"]
+  end
+  DIR["Scenario director&lt;br/&gt;storyboard · cards · chaos"]
+  subgraph SIMHOST["Sim host · Isaac Sim 6 / Isaac Lab 3 · GPU"]
+    WORLD["PhysX world&lt;br/&gt;hospital collision USD · lobby chairs"]
+    PEOPLE["5 SOMA-23 people, one per env&lt;br/&gt;tracker 30 Hz · shared physics 600 Hz"]
+    G1BODY["G1 articulation&lt;br/&gt;lowcmd to PD to lowstate · acts at 50 Hz"]
+  end
+  subgraph AGENTS["Agent service · Python 3.10 · rclpy"]
+    MINDS["5 LangGraph minds"]
+    MEM[("Memory + knowledge base&lt;br/&gt;SQLite · vector index")]
+    GW["LLM gateway&lt;br/&gt;only key holder"]
+  end
+  subgraph ROBOT["G1 ROS 2 stack · unchanged contract"]
+    STACK["controller · manager · Nav2 · tasks · speech"]
+  end
+  subgraph CLOUD["User's own AI account"]
+    ANT["Anthropic API"]
+    OAI["OpenAI API"]
+  end
+  CLI --> SIMHOST
+  CLI --> AGENTS
+  CFG --> AGENTS
+  CFG --> SIMHOST
+  KR -. "read at start-up" .-> GW
+  SIMHOST &lt;--&gt;|"ROS 2: /humans/*, /sim/audio/*, /clock"| AGENTS
+  STACK &lt;--&gt;|"ROS 2 + DDS: lowcmd, lowstate, sensors, /g1/speech/say"| SIMHOST
+  SIMHOST -- "/sim/audio/events" --> STACK
+  PANEL &lt;--&gt; DIR
+  CFG --> DIR
+  DIR -- "nudges, reflex overrides" --> AGENTS
+  DIR -- "world events" --> SIMHOST
+  GW --> ANT
+  GW --> OAI
+  MINDS --- MEM
+  MINDS --- GW
+  </pre></div>
+  <p class="caption">There are three processes on one machine, plus the robot stack, which can run on the same machine or on the robot. Only the gateway talks to an AI provider, and only it holds a key.</p>
+
+  <h3>7.2 One person, three layers</h3>
+  <div class="diagram"><pre class="mermaid">
+flowchart TB
+  subgraph MIND["Mind · agent service · event-driven, 0.2 to 2 s per decision"]
+    TRIG["Triggers&lt;br/&gt;speech heard · robot near · sign in view&lt;br/&gt;intent done or failed · patience timer"]
+    GRAPH["LangGraph&lt;br/&gt;observe, recall, decide, act, remember"]
+    TRIG --> GRAPH
+  end
+  subgraph REFLEX["Reflexes · agent service · 10 Hz · no AI"]
+    COUGH["Cough scheduler&lt;br/&gt;rate and severity from persona"]
+    IDLE["Fidget · breathing idle"]
+    GAZE["Gaze to voice or motion"]
+  end
+  subgraph BODY["Body · sim host · 30 Hz policy, 600 Hz shared physics"]
+    COMP["Motion composer&lt;br/&gt;clip library · stitch from current pose&lt;br/&gt;path warp · seat placement&lt;br/&gt;streams a rolling reference window"]
+    OVER["Upper-body overlays&lt;br/&gt;head, gaze, cough"]
+    TRACK["SOMA tracker&lt;br/&gt;epoch 2000 chair checkpoint"]
+    PHYS["PhysX&lt;br/&gt;66 PD joints, contacts, friction"]
+    COMP --> OVER --> TRACK --> PHYS
+  end
+  GRAPH -- "intent + words" --> COMP
+  COUGH -- "cough overlay + sound event" --> OVER
+  IDLE --> COMP
+  GAZE --> OVER
+  PHYS -- "status: pose, posture, progress, fell" --> TRIG
+  PHYS -- "status" --> REFLEX
+  </pre></div>
+  <p class="caption">The body always has something to do. It keeps running the last intent and its idle loop until the mind sends a new one, so people never freeze while an AI reply is on its way.</p>
+
+  <h3>7.3 Sim host components</h3>
+  <div class="diagram"><pre class="mermaid">
+flowchart LR
+  subgraph SH["Sim host process"]
+    direction TB
+    TICK["Tick scheduler 600 Hz&lt;br/&gt;people every 20 ticks · G1 every 12"]
+    SCN["Scenario loader&lt;br/&gt;roster, seats, arrivals, seed"]
+    subgraph PER["Per person, x5"]
+      direction TB
+      MC["Motion composer"]
+      SMS["Streaming motion source&lt;br/&gt;replaces the preloaded MotionLib"]
+      TR["Tracker input&lt;br/&gt;961-dim obs, 66 PD targets"]
+    end
+    ORA["Scene oracle&lt;br/&gt;view cone + line of sight&lt;br/&gt;signs, seats, people, robot"]
+    AUD["Audio router&lt;br/&gt;speech + cough events&lt;br/&gt;distance, loudness, hearing"]
+    CAMS["Head cameras&lt;br/&gt;full mode only"]
+    G1B["G1 bridge&lt;br/&gt;DDS rt/lowcmd, rt/lowstate"]
+    G1S["G1 sensors&lt;br/&gt;lidar + head camera include the people"]
+    REC["Recorder&lt;br/&gt;npz body states, events"]
+    RB["ROS 2 bridge&lt;br/&gt;JSON over std_msgs/String"]
+  end
+  TICK --> PER
+  TICK --> G1B
+  SCN --> PER
+  PER --> REC
+  ORA --> RB
+  AUD --> RB
+  CAMS --> RB
+  RB --> MC
+  G1B --> REC
+  PER --> G1S
+  </pre></div>
+
+  <h3>7.4 Agent service components</h3>
+  <div class="diagram"><pre class="mermaid">
+flowchart LR
+  subgraph AS["Agent service process · asyncio + rclpy"]
+    direction TB
+    ROS["ROS adapter&lt;br/&gt;subscribe status, observation, audio&lt;br/&gt;publish intent, say"]
+    subgraph PA["Per person, x5"]
+      direction TB
+      RF["Reflexes"]
+      LG["LangGraph mind"]
+      ST["Short-term memory&lt;br/&gt;checkpointer, SQLite"]
+    end
+    LT[("Long-term memory&lt;br/&gt;store + vectors&lt;br/&gt;namespace per person")]
+    KB[("Knowledge base&lt;br/&gt;research notes, personas,&lt;br/&gt;map, sign registry")]
+    EMB["Local embedding model"]
+    PERC["Full-mode adapters&lt;br/&gt;ASR faster-whisper · VLM calls · TTS"]
+    GW["LLM gateway&lt;br/&gt;provider switch · retries · budget&lt;br/&gt;prompt caching · token log"]
+    RCD["Decision recorder&lt;br/&gt;prompts, replies, intents"]
+  end
+  ROS --> RF
+  ROS --> LG
+  PERC --> LG
+  LG --> ST
+  LG --> LT
+  LG --> KB
+  LT --- EMB
+  KB --- EMB
+  LG --> GW
+  PERC --> GW
+  LG --> RCD
+  LG --> ROS
+  RF --> ROS
+  </pre></div>
+
+  <h3>7.5 ROS 2 topic graph</h3>
+  <div class="diagram"><pre class="mermaid">
+flowchart LR
+  SIM(["sim host"])
+  AG(["agent service"])
+  DR(["scenario director"])
+  DR -- "/scenario/timeline, /scenario/events" --> AG
+  DR -- "/humans/{id}/nudge, /humans/{id}/reflex" --> AG
+  DR -- "/sim/world_event" --> SIM
+  G1(["G1 stack"])
+  SIM -- "/humans/roster  (transient-local)" --> AG
+  SIM -- "/humans/{id}/status  10 Hz" --> AG
+  SIM -- "/humans/{id}/observation  oracle, 2 Hz + events" --> AG
+  SIM -- "/humans/{id}/camera/image/compressed  full mode" --> AG
+  AG -- "/humans/{id}/intent" --> SIM
+  AG -- "/humans/{id}/say" --> SIM
+  G1 -- "/g1/speech/say  (existing)" --> SIM
+  SIM -- "/sim/audio/events  speech, coughs" --> G1
+  SIM -- "/sim/audio/events" --> AG
+  SIM -- "/sim/audio/stream  full mode" --> G1
+  SIM -- "/clock" --> G1
+  SIM -- "/clock" --> AG
+  G1 -- "rt/lowcmd  500 Hz" --> SIM
+  SIM -- "rt/lowstate, /scan, /odom, /tf, head camera" --> G1
+  </pre></div>
+  <p class="caption">The <code>/humans/*</code> topics are the people's private senses and decisions. The robot is not allowed to read them. Messages crossing the sim boundary are JSON inside <code>std_msgs/String</code>, with a schema version, because Isaac's bundled Python would need a separate build for custom messages.</p>
+
+  <h3>7.6 Robot speaks, a person answers</h3>
+  <div class="diagram"><pre class="mermaid">
+sequenceDiagram
+  autonumber
+  participant G as G1 stack
+  participant S as Sim host
+  participant R as Reflexes (P5)
+  participant M as Mind (P5)
+  participant L as LLM gateway
+  G->>S: /g1/speech/say "Clinic 3 is down the corridor on your left"
+  S->>S: sound source at robot head, earshot + hearing check
+  S->>R: audio event (heard, distance 2.1 m)
+  R->>S: intent overlay: turn head to robot
+  S->>M: observation: robot speech addressed nearby
+  M->>M: recall: KB snippets + long-term memory
+  M->>L: decide (persona card cached, situation, recall)
+  L-->>M: JSON: intent walk_to clinic_3_door, say "Thank you", mood calmer
+  M->>S: /humans/P5/say "Thank you"
+  M->>S: /humans/P5/intent walk_to(clinic_3_door)
+  S->>G: /sim/audio/events P5 speech "Thank you"
+  S->>S: composer stitches stand_up then walk from current pose
+  S-->>M: status: walking, progress 0.2
+  M->>M: remember "robot directed me to clinic 3"
+  </pre></div>
+
+  <h3>7.7 Perception modes</h3>
+  <div class="diagram"><pre class="mermaid">
+flowchart LR
+  subgraph OR["Oracle mode · default · RTX 3070 OK"]
+    O1["View cone + raycast"] --> O3["Observation JSON"]
+    O2["Earshot + hearing model&lt;br/&gt;speech as text"] --> O3
+  end
+  subgraph FU["Full mode · RTX 5090"]
+    F1["Head camera frame&lt;br/&gt;on event or every N s"] --> F2["Vision model call"] --> F5["Observation JSON"]
+    F3["Scene audio near the person"] --> F4["Local ASR&lt;br/&gt;faster-whisper"] --> F5
+  end
+  O3 --> SAME["Same observation schema&lt;br/&gt;so the mind is unchanged"]
+  F5 --> SAME
+  </pre></div>
+
+  <h3>7.8 Run, record, replay</h3>
+  <div class="diagram"><pre class="mermaid">
+flowchart LR
+  A["hhumans run scenario.yaml"] --> B{"key check&lt;br/&gt;tiny authenticated call"}
+  B -- "no key" --> X["Stop with setup steps"]
+  B -- "ok" --> C["Load memory snapshot"]
+  C --> D["Live run&lt;br/&gt;real-time clock or lockstep"]
+  D --> E[("Run folder&lt;br/&gt;configs · seeds · model IDs&lt;br/&gt;prompts · replies · intents&lt;br/&gt;body npz · audio events&lt;br/&gt;memory snapshot in and out")]
+  E --> F["hhumans replay run&lt;br/&gt;no key, no cost"]
+  F --> G["Same people,&lt;br/&gt;new robot build"]
+  E --> H["render_recording.py&lt;br/&gt;photoreal spans"]
+  </pre></div>
+
+  <h3>7.9 Deployment</h3>
+  <div class="diagram"><pre class="mermaid">
+flowchart TB
+  subgraph DEV["Development · RTX 3070 8 GB · 62 GB RAM"]
+    D1["Sim host, oracle mode, cameras off&lt;br/&gt;sim time + lockstep if slower than real time"]
+    D2["Agent service + local embeddings on CPU"]
+    D3["G1 stack sim, ROS 2 Humble"]
+  end
+  subgraph TGT["Target · RTX 5090 32 GB"]
+    T1["Sim host, full mode&lt;br/&gt;5 head cameras + G1 sensors"]
+    T2["Agent service&lt;br/&gt;ASR + embeddings on GPU"]
+    T3["G1 stack sim or real G1 over DDS"]
+  end
+  subgraph SRV["Optional · A6000 48 GB server"]
+    S1["Batch replays and renders"]
+  end
+  DEV -. "same configs and run folders" .-> TGT
+  TGT -. "run folders" .-> SRV
+  </pre></div>
+</section>
+
+<section id="mind">
+  <h2><span class="code">08</span><span class="plate">Mind and memory</span></h2>
+  <h3>8.1 The LangGraph mind</h3>
+  <div class="diagram"><pre class="mermaid">
+stateDiagram-v2
+  [*] --> Idle
+  Idle --> Observe: trigger (debounced)
+  Observe --> Recall
+  Recall --> Decide
+  Decide --> Act: valid JSON
+  Decide --> KeepIntent: invalid, timeout or budget hit
+  KeepIntent --> Remember
+  Act --> Remember
+  Remember --> Summarise: short-term full or timer
+  Summarise --> Idle
+  Remember --> Idle
+  </pre></div>
+  <ul>
+    <li><b>Triggers:</b>
+      <ul>
+        <li>speech addressed to the person or nearby</li>
+        <li>the robot comes within a set distance</li>
+        <li>a new sign or person comes into view</li>
+        <li>the person's own intent finishes or fails</li>
+        <li>a cough nearby</li>
+        <li>a patience timer from the persona</li>
+      </ul>
+      A person decides at most once every few seconds.</li>
+    <li><b>Decide output (schema-checked):</b> an intent with its parameters, optional words to say, mood and patience updates, and a one-line reason for the record.</li>
+    <li><b>Prompt order for caching:</b> fixed instructions, then the persona card and the intent schema. Only the situation and recalled snippets change between calls, so the rest is cached.</li>
+  </ul>
+
+  <h3>8.2 Memory architecture</h3>
+  <div class="diagram"><pre class="mermaid">
+flowchart TB
+  NOTES["research_notes/&lt;br/&gt;11 UK persona notes + physics notes"] --> KBB["hhumans kb build&lt;br/&gt;chunk by heading, keep source links"]
+  PERS["personas.yaml"] --> KBB
+  MAP["hospital map + signs.yaml"] --> KBB
+  KBB --> KB[("Knowledge base&lt;br/&gt;read-only during runs&lt;br/&gt;shared by everyone")]
+  subgraph PERSON["Per person"]
+    STM["Short-term&lt;br/&gt;last minutes, current goal, mood&lt;br/&gt;lives for one run"]
+    LTM[("Long-term&lt;br/&gt;episode summaries + facts&lt;br/&gt;time, importance, embedding&lt;br/&gt;key: persona + seed")]
+    STM -- "summarise, cheap model" --> LTM
+  end
+  KB -- "retrieve top-k" --> DEC["decide"]
+  LTM -- "retrieve by relevance, recency, importance" --> DEC
+  STM --> DEC
+  SEED["Seed state from personas.yaml"] -- "reset" --> LTM
+  SNAP[("Named snapshots")] -- "restore" --> LTM
+  LTM -- "save" --> SNAP
+  </pre></div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Command</th><th>Effect</th></tr></thead>
+    <tbody>
+      <tr><td><code>hhumans memory reset --person P5</code></td><td>One person back to their seed state</td></tr>
+      <tr><td><code>hhumans memory reset --persona coughing_patient</code></td><td>Every instance of a persona back to seed</td></tr>
+      <tr><td><code>hhumans memory reset --all</code></td><td>Everyone back to seed (asks for confirmation)</td></tr>
+      <tr><td><code>hhumans memory snapshot save|restore|list</code></td><td>Named states for repeatable studies. Every run records its snapshot in and out.</td></tr>
+      <tr><td><code>hhumans kb build</code></td><td>Rebuild the knowledge base after notes change</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>8.3 Configuration model</h3>
+  <div class="diagram"><pre class="mermaid">
+erDiagram
+  SCENARIO ||--|{ CAST_ENTRY : lists
+  CAST_ENTRY }o--|| PERSONA : instantiates
+  CAST_ENTRY ||--|| PERSON_INSTANCE : "creates (seed)"
+  PERSON_INSTANCE ||--o| LONG_TERM_MEMORY : owns
+  SCENARIO }o--o| SNAPSHOT : "starts from"
+  SCENARIO ||--|| MODEL_ROLES : uses
+  PERSONA }o--o{ RESEARCH_SOURCE : cites
+  SCENARIO {
+    string id
+    int duration_min
+    int seed
+    string perception "oracle | full"
+    string provider "claude | openai"
+    float budget_usd
+  }
+  PERSONA {
+    string id
+    range age
+    string role
+    object symptoms "cough rate, severity"
+    string mobility
+    range hearing
+    range patience
+    range anxiety
+    string attitude_to_robots
+    list goals
+  }
+  CAST_ENTRY {
+    string persona
+    int count
+    string seat_or_arrival
+    string companion_of
+  }
+  MODEL_ROLES {
+    string decide
+    string summarise
+    string vision
+  }
+  </pre></div>
+  <p class="caption">Persona fields are ranges. Each instance samples its values from the seed, so two "coughing patient" instances are different people, and the same seed gives the same person every time.</p>
+</section>
+
+<section id="models">
+  <h2><span class="code">09</span><span class="plate">Models and cost</span></h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Role</th><th>Claude default</th><th>Cheaper option</th><th>Why</th></tr></thead>
+    <tbody>
+      <tr><td>Person decisions</td><td><code>claude-opus-5-5</code>, effort low</td><td><code>claude-sonnet-5-5</code></td><td>Persona consistency and judgement. Low effort keeps replies to a second or two.</td></tr>
+      <tr><td>Memory summaries, observation parsing</td><td><code>claude-haiku-5-5</code></td><td>(already the cheapest)</td><td>Frequent and simple</td></tr>
+      <tr><td>Full-mode vision</td><td><code>claude-opus-5-5</code></td><td><code>claude-sonnet-5-5</code></td><td>Reads signs and scenes from camera frames</td></tr>
+      <tr><td>OpenAI equivalents</td><td colspan="3">Set per role in the scenario file. Defaults are picked at build time from the models the OpenAI API then offers.</td></tr>
+    </tbody>
+  </table></div>
+  <div class="callout">
+    <p><b>Implementation notes from the review</b></p>
+    <ul>
+      <li><b>Structured output:</b> use the API's native structured-output mode (<code>output_config.format</code>), not a forced tool call. Opus 5.5 and Sonnet 5.5 reject forced <code>tool_choice</code>, and LangChain's Anthropic structured-output helper forces one by default. If the wrapper does not pass <code>output_config.effort</code>, call the Anthropic SDK directly in that graph node.</li>
+      <li><b>Thinking cannot be switched off on Opus 5.5.</b> Even at low effort, a decision may take a few seconds. Phase 1 measures Opus 5.5 (low) against Sonnet 5.5 for latency and persona quality, and sets the default from the result. Reflexes cover the gap.</li>
+      <li><b>Cache lifetime:</b> use the 1-hour prompt cache. Decisions can be minutes apart, longer than the default 5 minutes.</li>
+    </ul>
+  </div>
+  <div class="callout">
+    <p><b>Estimated cost of one hour-long oracle run</b> (to be measured in phase 1). Assumptions:</p>
+    <ul>
+      <li>5 people making 60–120 decisions each, so up to 600 calls.</li>
+      <li>About 8k input tokens per call, mostly served from the cache.</li>
+      <li>About 300–600 output tokens per call, including thinking.</li>
+    </ul>
+    <p>Estimates per run:</p>
+    <ul>
+      <li><b>Claude Opus 5.5:</b> about $10–15.</li>
+      <li><b>Claude Sonnet 5.5:</b> about $5–8.</li>
+      <li><b>Haiku summaries:</b> under $0.50.</li>
+      <li><b>Replays:</b> $0.</li>
+      <li><b>Full mode</b> adds image calls, set by how often frames are sent.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="security">
+  <h2><span class="code">10</span><span class="plate">Keys and security</span></h2>
+  <ul>
+    <li><b>Bring your own account.</b> Each user needs an Anthropic Console or OpenAI Platform account with pay-as-you-go billing. Claude Pro or Max and ChatGPT subscriptions cannot be used for API calls. The README covers creating a key and setting a monthly spend limit.</li>
+    <li><b>Storage, in order of preference:</b>
+      <ol>
+        <li><code>ant auth login</code>: an Anthropic OAuth profile with short-lived tokens.</li>
+        <li><code>hhumans keys set claude|openai</code>: stored in the OS keyring (GNOME Keyring / Secret Service).</li>
+        <li>Headless servers: a key file outside the repo with mode 600, located through an environment variable.</li>
+      </ol>
+    </li>
+    <li><b>One holder.</b> Only the LLM gateway reads the key. ROS parameters and topics are readable by anyone on the DDS domain, so a key must never touch them.</li>
+    <li><b>Never written:</b> not to git, logs, launch files, ROS, recordings or run folders. Logs redact anything that looks like a key, and a pre-commit secret scan guards the repo.</li>
+    <li><b>No key, no run.</b> One tiny authenticated call at start-up. If it fails, the run stops and prints the setup steps.</li>
+    <li><b>Budget cap</b> per scenario. When it is reached, new AI calls stop and the bodies carry on with their last intents and reflexes.</li>
+  </ul>
+  <div class="diagram"><pre class="mermaid">
+sequenceDiagram
+  participant U as User
+  participant C as hhumans CLI
+  participant K as Keyring / ant profile
+  participant G as LLM gateway
+  participant P as Provider API
+  U->>C: hhumans keys set claude (once)
+  C->>K: store secret (never echoed)
+  U->>C: hhumans run waiting_area_v1.yaml
+  C->>G: start agent service
+  G->>K: read secret in memory only
+  G->>P: tiny authenticated call
+  alt key works
+    P-->>G: 200
+    G-->>C: ready, run starts
+  else missing or rejected
+    P-->>G: 401 or no key
+    G-->>C: stop: "No working Claude key. Run hhumans keys set claude or ant auth login."
+  end
+  </pre></div>
+</section>
+
+<section id="review">
+  <h2><span class="code">11</span><span class="plate">Strategy review</span></h2>
+  <p>This is a critical read of the whole approach. It asks what holds up, what is risky, and what we rejected and why.</p>
+  <h3>What holds up</h3>
+  <ul>
+    <li><b>Separating mind, reflexes and body</b> fits the timescales. Physics runs at 120 Hz, the tracker at 30 Hz, and AI decisions take seconds. Letting an AI model drive joints or even per-frame motion would be slow, expensive and unstable.</li>
+    <li><b>Event-driven decisions</b> keep cost roughly proportional to how much happens in the room, not to the clock.</li>
+    <li><b>Keeping the robot blind to the people's minds</b> is what makes this a fair test of any G1 task, including tasks not yet written.</li>
+    <li><b>Replay from recorded decisions</b> fixes the biggest weakness of AI-driven agents for research, which is that they are not repeatable. It also makes regression testing of robot builds free.</li>
+    <li><b>Grounding personas in cited research</b> through retrieval (RAG) makes behaviour defensible in a study write-up.</li>
+    <li><b>Building on what works:</b> the chair-trained tracker, the measured chairs, the collision world, the memory-capped launcher and the photoreal renderer are all reused.</li>
+  </ul>
+  <h3>Risks</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Risk</th><th>Level</th><th>Mitigation</th></tr></thead>
+    <tbody>
+      <tr><td>The tracker stumbles when an intent switches mid-motion. It was trained on whole clips, not live stitching.</td><td><span class="pill risk">HIGH</span></td><td>Spike S1 first. Then, in order: longer blends, transition clips, and finally a short fine-tune on stitched sequences (only with the user's go-ahead).</td></tr>
+      <tr><td>The tracker reads a preloaded motion library and freezes on its last frame, so live composition needs a streaming motion source</td><td><span class="pill risk">HIGH</span></td><td>Part of spike S1: a patched or replaced motion manager serving a rolling window per person.</td></tr>
+      <tr><td>Shared 600 Hz physics (needed for the G1's 500 Hz-class PD). The tracker was trained at 120 Hz.</td><td><span class="pill should">MED</span></td><td>Spike S3 compares tracking at 120 and 600 Hz. Fallback is 300 Hz. The tick scheduler from the integration notes is used.</td></tr>
+      <tr><td>No trained G1 walking policy exists yet</td><td><span class="pill should">MED</span></td><td>v1 robot role decided by Q1. A standing robot that speaks needs no new policy.</td></tr>
+      <tr><td>Motion clips: the BONES-SEED SOMA archive is 45 GB (gzip, so it cannot be partly downloaded), and the PC has about 24 GB free</td><td><span class="pill should">MED</span></td><td>Stream the archive from Hugging Face straight through <code>tar</code>, keeping only the listed clips, then convert them and delete the BVH files in batches. No server is needed.</td></tr>
+      <tr><td>No seated or standing cough clips in BONES-SEED</td><td><span class="pill should">MED</span></td><td>Search the manifest. Otherwise use a synthetic overlay (torso and head flexion, hand or elbow to mouth), as with the nod.</td></tr>
+      <tr><td>AI latency spikes or rate limits make people seem slow to respond</td><td><span class="pill should">MED</span></td><td>Reflexes acknowledge at once (head turn). The body keeps its intent. Decisions are debounced. Lockstep mode is available for studies where timing must not depend on the network.</td></tr>
+      <tr><td>Exact replay holds only on the same machine and build</td><td><span class="pill could">LOW</span></td><td>The run folder records the GPU, driver and build. Cross-machine studies use <code>rerun</code> or <code>replay --intents</code>.</td></tr>
+      <tr><td>Out-of-character or unsafe replies</td><td><span class="pill should">MED</span></td><td>Schema-checked output, an allow-list of intents, the persona card first in every prompt, and the reason recorded for review.</td></tr>
+      <tr><td>Running 5 people, the G1, the 2.7M-triangle collision world and 5 cameras on one GPU</td><td><span class="pill should">MED</span></td><td>Oracle mode on the RTX 3070, on sim time with lockstep. Full mode on the RTX 5090, with low-rate cameras rendered on events. S3 measures the real-time factor.</td></tr>
+      <tr><td>Host RAM blow-up from scene objects</td><td><span class="pill could">LOW</span></td><td>One person per env (5 envs, shared origin), the capped launcher, and chairs as global prims rather than per-env objects.</td></tr>
+      <tr><td>Memory drift: a long-term memory gathers odd beliefs over many runs</td><td><span class="pill could">LOW</span></td><td>Snapshots, reset, importance-weighted summaries, and inspectable SQLite.</td></tr>
+    </tbody>
+  </table></div>
+  <h3>Alternatives considered</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Alternative</th><th>Why not (for now)</th></tr></thead>
+    <tbody>
+      <tr><td>Isaac Sim's built-in animated people (kinematic)</td><td>No physics, so no real contact with chairs or the robot, which defeats the purpose.</td></tr>
+      <tr><td>MaskedMimic or other goal-conditioned controllers</td><td>Released checkpoints are SMPL-based (non-commercial body model). SOMA is our body. It remains an option if a SOMA version appears.</td></tr>
+      <tr><td>One "director" AI controlling all five people</td><td>Cheaper, but people would share one mind, with no private perception or memory. Per-person agents match the study design.</td></tr>
+      <tr><td>AI decision every frame or on a fixed fast clock</td><td>Cost and latency explode, and nothing is gained over event triggers plus reflexes.</td></tr>
+      <tr><td>Custom ROS messages across the sim boundary</td><td>Isaac's bundled Python would need its own message build. JSON in standard messages is simpler for v1, and custom types can follow.</td></tr>
+      <tr><td>Local open-weight AI models</td><td>The user chose Claude or OpenAI. The gateway design leaves room for a local provider later.</td></tr>
+    </tbody>
+  </table></div>
+  <div class="verdict">
+    <span class="pill must">VERDICT</span>
+    <span>The strategy is sound, provided the motion-stitching spike passes. Everything else is integration of known parts. Run the three spikes before committing to the build plan.</span>
+  </div>
+</section>
+
+<section id="roadmap">
+  <h2><span class="code">12</span><span class="plate">Roadmap</span></h2>
+  <div class="diagram"><pre class="mermaid">
+timeline
+  title WardZero Persona Agents
+  Phase 0 · Spikes : S1 live motion stitching : S2 cough motion + sound : S3 five people + G1 in real time
+  Phase 1 · v1 core (oracle) : Storyboard + scenario cards + control panel : Persona + scenario files : Agent service + gateway + keys : Memory, RAG, reset, snapshots : Oracle perception + audio routing : Record + replay
+  Phase 2 · v1 complete (full mode) : Head cameras + vision model : Scene audio, ASR, robot TTS : README service setup : RTX 5090 tuning
+  v2 · Benchmark + configure : G1 metrics and study reports : Configuration screen : More areas and larger casts : UC1 meal delivery
+  Packaging track : pip install wardzero : apt ROS 2 packages : WardZero Sim app on the Kit template : Docker build from NVIDIA base
+  Later (not planned yet) : Crisis simulations : Text-to-motion clips (Kimodo) : Getting up after falls : Local AI provider option : Crowds across GPUs
+  </pre></div>
+
+  <div class="phase">
+    <div class="ph"><b>Phase 0: Spikes</b><span class="tag">throwaway code · gate for phase 1</span></div>
+    <div class="pb">
+      <div><h5>Work</h5><ul><li>S1: a streaming motion source plus one person cycling sit, cough, stand, walk and sit with random switch times, starting from the physical state, with a video</li><li>S0: a local motion-data script streams BONES-SEED from Hugging Face, keeps the listed clips and converts them, with no server involved</li><li>S2: find or synthesise seated and standing cough clips, plus a cough sound event</li><li>S3: 5 people (one per env) and the G1 under the 600 Hz tick scheduler with the collision world on the RTX 3070. Compare tracking at 120 and 600 Hz. Measure real-time factor, VRAM and RAM.</li></ul></div>
+      <div><h5>Exit criteria</h5><ul><li>Under 1 fall per person-hour, seated hip offset under 0.08 m</li><li>Coughs read as coughs on video</li><li>Tracking at 600 Hz (or 300 Hz) within 10% of 120 Hz. Real-time factor measured. RAM under 44 GB.</li><li>The user reviews the videos</li></ul></div>
+    </div>
+  </div>
+  <div class="phase">
+    <div class="ph"><b>Phase 1: v1 core, oracle mode</b><span class="tag">FR-1–7, 9–17 · NFR all</span></div>
+    <div class="pb">
+      <div><h5>Work</h5><ul><li><code>hospital-sim-agents/</code> component: CLI, config schemas, gateway, keys</li><li>LangGraph mind, reflexes, short- and long-term memory</li><li>Knowledge base build from research notes, sign registry</li><li>Sim host: multi-person live scene, composer, oracle, audio router, ROS bridge</li><li>Run folder, replay, token and cost log</li><li>Scenario director: storyboard, starter card deck, chaos mode</li><li>Scenario control panel (local browser page)</li><li>Interface additions to <code>docs/interfaces.md</code></li></ul></div>
+      <div><h5>Exit criteria</h5><ul><li>A one-hour waiting-area run with the G1 speaking to people: no falls beyond the target, replies under 3 s median</li><li>Replay reproduces the run</li><li>Memory reset and snapshots tested</li><li>Runs on both Claude and OpenAI</li><li>Each starter card fired from the panel, with a video per card</li><li>Video of a 2-minute interaction span</li></ul></div>
+    </div>
+  </div>
+  <div class="phase">
+    <div class="ph"><b>Phase 2: v1 complete, full perception</b><span class="tag">FR-8, FR-19 · target RTX 5090</span></div>
+    <div class="pb">
+      <div><h5>Work</h5><ul><li>Head cameras on events, vision-model observation adapter</li><li>Scene audio mix, local ASR, robot TTS voice</li><li>Sign textures with readable text</li><li>README: enabling each service, hardware notes, costs</li></ul></div>
+      <div><h5>Exit criteria</h5><ul><li>The same scenario runs in full mode in real time on the RTX 5090</li><li>P5 reads a sign from pixels</li><li>The robot hears P3's question as audio</li></ul></div>
+    </div>
+  </div>
+  <div class="phase">
+    <div class="ph"><b>v2: Benchmark and configure</b><span class="tag">next version · scoped later</span></div>
+    <div class="pb">
+      <div><h5>Candidate work</h5><ul><li>G1 benchmarking: interaction metrics, task success, study reports</li><li>Configuration screen for personas, storyboards and cards (authoring in the panel)</li><li>A&amp;E waiting, ward bays, corridors; casts beyond 5</li><li>UC1 meal delivery with a bed patient</li></ul></div>
+      <div><h5>Depends on</h5><ul><li>The phase 1 run-folder format (metrics are computed from it)</li><li>The user deciding which robot measures matter</li></ul></div>
+    </div>
+  </div>
+  <div class="phase">
+    <div class="ph"><b>Later: Crisis simulations</b><span class="tag">not planned yet · user 3 Nov: no crisis yet, v1 is directions</span></div>
+    <div class="pb">
+      <div><h5>Scenarios (crisis packs: storyboards + cards)</h5><ul><li>Fire evacuation: alarm, smoke-filled corridor, closed fire doors, slow movers and wheelchairs</li><li>Mass-casualty surge in A&amp;E: many arrivals, triage, crowded corridors, trolleys</li><li>Infection outbreak: isolation, masks, distancing, restricted areas</li><li>Power or lift failure: dim lighting, stranded patients, stairs only</li><li>Violent or highly distressed visitor: de-escalation and keeping others safe</li></ul></div>
+      <div><h5>What it needs beyond v1/v2</h5><ul><li>Staff personas (nurses, porters, security) with their own protocols, drawn from the staffing research</li><li>Environment events: smoke and visibility, lighting levels, door and lift states, blocked routes</li><li>Larger physics crowds, running, stumbling and falls with getting up; wheelchairs, beds and trolleys</li><li>Hospital emergency procedures in the knowledge base (evacuation routes, triage categories)</li><li>Crisis-specific robot measures: route clearance, evacuation assistance, time to safety</li></ul></div>
+    </div>
+  </div>
+  <div class="phase">
+    <div class="ph"><b>Packaging track: WardZero as an installable app</b><span class="tag">can start any time after Plan 1 · full app after Plan 2</span></div>
+    <div class="pb">
+      <div><h5>Layers</h5><ul><li><code>pip install wardzero</code>: persona minds, memory, storyboards, cards, control panel and CLI (pure Python)</li><li><code>apt install ros-humble-wardzero</code>: interfaces, bridge nodes and a robot adapter (simulated or real G1, topic mapping, speech in/out), built with bloom into our own apt repository</li><li>WardZero Sim: a branded application on NVIDIA's Kit app template (the engine under Isaac Sim) with the hospital, physics people, G1 and a docked scenario panel</li><li>A Dockerfile that builds on NVIDIA's Isaac Sim base image on the user's machine</li></ul></div>
+      <div><h5>Constraints</h5><ul><li>Isaac Sim itself is not redistributed: users install it from NVIDIA and accept NVIDIA's licence</li><li>BONES-SEED motion data is fetched by each user under their own licence acceptance; never bundled</li><li>Licences to check before any public release: SOMA tracker checkpoint, hospital assets from the healthcare asset pack, Unitree G1 model files</li><li>Confidential project work stays out of public packages</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<section id="open">
+  <h2><span class="code">13</span><span class="plate">Open questions</span></h2>
+  <p>A builder review of the design raised these. Only the user can answer them, and each answer changes what gets built. They are ranked by importance.</p>
+  <div class="table-wrap"><table>
+    <thead><tr><th>#</th><th>Question</th><th>Why it matters</th></tr></thead>
+    <tbody>
+      <tr><td class="id">Q1</td><td>What does the G1 do during the hour, and who drives it: a teleoperator, a scripted mission, or a standing robot that only speaks?</td><td>The people react only to the robot. No trained G1 walking policy exists yet, so a walking G1 under Nav2 adds a whole workstream.</td></tr>
+      <tr><td class="id">Q2</td><td>Main-entrance lobby or the A&amp;E waiting area? Should the nurse who calls names be a visible person, or a voice only?</td><td>The storyboard now gives the hour its structure. A visible nurse adds a sixth body and a staff persona.</td></tr>
+      <tr><td class="id">Q3</td><td>Which re-run modes does v1 need: exact replay, recorded people against a new robot build, live re-run, or all three?</td><td>Sets what the recorder stores and how robot builds are compared.</td></tr>
+      <tr><td class="id">Q4</td><td>Confirm the starter storyboard beats and card deck (section 05).</td><td>Each card needs its own intents, clips and sounds.</td></tr>
+      <tr><td class="id">Q5</td><td>Confirm the three non-coughing cast members.</td><td>Sets the clip and persona needs.</td></tr>
+      <tr><td class="id">Q6</td><td>Who installs the packaged app: our lab and partners, or external hospitals and robotics teams as a product?</td><td>Decides how much licensing review, installer polish and a public apt repository matter.</td></tr>
+      <tr><td class="id">Q7</td><td>When crisis simulations are planned later, which come first, and should they follow a real hospital's emergency procedures?</td><td>Not needed now: v1 focuses on directions (user, 3 Nov).</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="decisions">
+  <h2><span class="code">14</span><span class="plate">Decision log</span></h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Date</th><th>Decision</th><th>By</th></tr></thead>
+    <tbody>
+      <tr><td>2026-11-03</td><td>ROS 2 orchestrates. LangChain/LangGraph agents give each person a persona and intelligence.</td><td>User</td></tr>
+      <tr><td>2026-11-03</td><td>Human behaviour is independent of the G1. People are generalist, with many instances per persona.</td><td>User</td></tr>
+      <tr><td>2026-11-03</td><td>People act on what they see (signs) and hear (robot voice messages).</td><td>User</td></tr>
+      <tr><td>2026-11-03</td><td>Both perception modes are built and chosen at launch, with README setup steps.</td><td>User</td></tr>
+      <tr><td>2026-11-03</td><td>Claude or OpenAI. Each user brings their own account. Keys are stored securely and required to run.</td><td>User</td></tr>
+      <tr><td>2026-11-03</td><td>Standardised research-based RAG memory, continuously updated, with user reset.</td><td>User</td></tr>
+      <tr><td>2026-11-03</td><td>Persona file plus configuration. The configuration screen is in v2. v1 is the waiting area with 5 people, 2 of them coughing.</td><td>User</td></tr>
+      <tr><td>2026-11-03</td><td>G1 benchmarking moved to v2. RTX 5090 is the long-term target.</td><td>User</td></tr>
+      <tr><td>2026-11-03</td><td>A storyboard starts on launch. A scenario control panel fires scenarios at the robot during the run.</td><td>User</td></tr>
+      <tr><td>2026-11-03</td><td>Slower than real time is acceptable on the RTX 3070.</td><td>User</td></tr>
+      <tr><td>2026-11-03</td><td>Long-term memory carries across runs by default, with a reset option.</td><td>User</td></tr>
+      <tr><td>2026-11-03</td><td>The repository must not depend on the Paperspace server. Motion data is fetched locally from the original source.</td><td>User</td></tr>
+      <tr><td>2026-11-03</td><td>No crisis scenarios yet: v1 focuses on patients and visitors asking for directions. Crisis simulations stay a later idea. Fire-alarm card removed from the starter deck; ward visitor, toilet request and way out cards added. WardZero to become an installable app (pip, apt, Kit-based simulator) with UI-driven scenarios and user-controlled G1 integration.</td><td>User</td></tr>
+      <tr><td>2026-11-03</td><td>Builder review corrections: one person per env, 600 Hz shared physics with a tick scheduler, a streaming motion source, people visible to the robot's sensors, native structured output, a 1-hour prompt cache, three re-run modes</td><td>Claude (proposed)</td></tr>
+      <tr><td>2026-11-03</td><td>Three layers (mind, reflexes, body), JSON over standard ROS messages, local memory and embeddings, replay, the robot-fairness rule, default models</td><td>Claude (proposed)</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="glossary">
+  <h2><span class="code">15</span><span class="plate">Glossary</span></h2>
+  <div class="table-wrap"><table>
+    <tbody>
+      <tr><td><b>SOMA-23</b></td><td>The 23-body, 66-joint human skeleton used by NVIDIA's ProtoMotions trackers and BONES-SEED clips.</td></tr>
+      <tr><td><b>Tracker</b></td><td>The trained physics controller that makes a simulated human follow a reference motion with real balance.</td></tr>
+      <tr><td><b>Intent</b></td><td>A behaviour the mind asks the body to perform, such as <code>sit_down(seat_id)</code>.</td></tr>
+      <tr><td><b>Oracle mode</b></td><td>The simulator states what each person can see and hear, computed from the scene, with no cameras.</td></tr>
+      <tr><td><b>Full mode</b></td><td>People perceive through rendered head cameras and scene audio, interpreted by AI and speech-to-text models.</td></tr>
+      <tr><td><b>RAG</b></td><td>Retrieval-augmented generation: relevant notes and memories are looked up and added to each decision prompt.</td></tr>
+      <tr><td><b>Tick scheduler</b></td><td>The 600 Hz physics loop that steps the people every 20 ticks (30 Hz) and the G1 every 12 ticks (50 Hz).</td></tr>
+      <tr><td><b>Storyboard</b></td><td>The timed sequence of beats that starts when WardZero launches and gives a run its shape.</td></tr>
+      <tr><td><b>Scenario card</b></td><td>A ready-made situation (a coughing fit, a lost visitor, a fire alarm) fired by the storyboard, chaos mode or the experimenter.</td></tr>
+      <tr><td><b>Replay</b></td><td>Re-running a recorded hour using its saved decisions instead of calling the AI provider.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<footer>
+  WardZero Persona Agents, product requirements and roadmap, draft 3 (3 Nov 2026). Source of truth for the design
+  details: <code>docs/design/2026-11-03-human-persona-agents-design.md</code>. This page lives in the
+  repository at <code>docs/product/human-persona-agents-prd.html</code>.
+</footer>
+</main>
+</div>

@@ -39,6 +39,7 @@ Built by Rakshith Bangalore Kumaraswamy.
 |---|---|---|
 | 1.0 | `main`, tag `v1.0` | The original hospital and surgical wing. Doorways are open gaps. |
 | 2.0 | `v2` | The hospital is closer to UK guidance. It adds fire doors, bed lifts, a re-planned ward and A&E, and a wider link corridor. |
+| 3.0 | `v3` | Version 2 and simulated people: patients and visitors with AI minds, memory and reflexes, in a waiting area beside the robot. |
 
 Version 2 adds:
 
@@ -60,6 +61,35 @@ To get version 2:
 git clone --recurse-submodules -b v2 https://github.com/Bkrakshith/hospital-sim.git
 # or, with vcstool:
 vcs import < hospital-sim.repos   # on the v2 branch, the changed repos point to their v2 branches
+```
+
+Version 3 adds simulated people (new repository [hospital-sim-agents](https://github.com/Bkrakshith/hospital-sim-agents)):
+
+- Five people in the main-entrance waiting area: two patients with a cough (one older and breathless), the
+  companion of the older patient, an older patient with a stick who is hard of hearing, and an anxious
+  first-time patient. During the scene, a visitor arrives and asks the way to the ward.
+- Each person has a mind, reflexes and a body. The mind is a LangGraph agent on Claude or OpenAI.
+  It reads the signs, hears the robot and other people, and decides what to do next. The reflexes
+  (cough, fidget, turn to a voice) run with no AI.
+- Memory for each person: short-term memory for the current run, and long-term memory that carries
+  across runs. A command resets the memory, and snapshots let you restore it.
+- A small knowledge base made from the project research notes. It gives the people realistic behaviour.
+- A storyboard that starts when the scene starts, and a browser control panel that sends scenario cards
+  (for example "ask the robot the way to the toilet") to test how the robot responds.
+- A fairness rule: the robot gets only what a real robot can sense. It cannot read the people's minds
+  or the scenario topics. `hhumans audit` checks the live ROS 2 graph.
+- A recording of each run, and three ways to replay or run it again.
+- Each user uses their own Claude or OpenAI account. The keys stay in the system keyring and never go
+  into logs, topics or git. The system does not run without a key.
+
+In version 3, the people move in a stand-in 2D simulator. Their bodies in Isaac Sim come next. The design
+is in [docs/design/](docs/design/), and the product requirements and roadmap are in
+[docs/product/human-persona-agents-prd.html](docs/product/human-persona-agents-prd.html).
+
+To get version 3:
+
+```bash
+git clone --recurse-submodules -b v3 https://github.com/Bkrakshith/hospital-sim.git
 ```
 
 ## What you can do with WardZero
@@ -265,6 +295,7 @@ The table below lists the repositories.
 | `g1-whole-body-rl/` | [g1-whole-body-rl](https://github.com/Bkrakshith/g1-whole-body-rl) | Whole-body controller training in MuJoCo MJX and the ONNX export |
 | `ros2_ws/src/hospital-sim-ros2/` | [hospital-sim-ros2](https://github.com/Bkrakshith/hospital-sim-ros2) | The ROS 2 Humble packages: interfaces, controller, mode manager, teleoperation, simulator node, navigation, task layer, bringup |
 | `g1-webcam-teleop/` | [g1-webcam-teleop](https://github.com/Bkrakshith/g1-webcam-teleop) | Webcam teleoperation of the arms and hands |
+| `hospital-sim-agents/` | [hospital-sim-agents](https://github.com/Bkrakshith/hospital-sim-agents) | Simulated people: AI minds, memory, reflexes, storyboard, scenario control panel, run recording (version 3) |
 | `docs/` | this repository | The interface contract and the system architecture |
 | `datasets/` | Hugging Face | Recorded data. It is not in git. See [datasets/README.md](datasets/README.md). |
 
@@ -330,8 +361,9 @@ These parts work in both simulators:
 - mapping and navigation through the hospital and the surgical wing
 - the first training stage of the controller (stand)
 
-The walking and motion-tracking stages of the controller are not trained yet. The ROS 2 stack walks
-with a placeholder policy for the legs. Nothing has run on a physical robot.
+The simulated people (version 3) run in a stand-in 2D simulator with a placeholder reception robot.
+Their Isaac Sim bodies are not connected yet. The walking and motion-tracking stages of the controller are
+not trained yet. The ROS 2 stack walks with a placeholder policy for the legs. Nothing has run on a physical robot.
 
 ## License
 

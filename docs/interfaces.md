@@ -320,3 +320,34 @@ from the i4h scissor workflow) + clearly-labelled procedural stand-ins (scalpel 
 held upright in a **tool rack** on the instrument table.
 Until the Stage B policy exists, arm skills are developed with the sim's **fixed-base option** (pelvis welded),
 because the placeholder policy falls on large reaches.
+
+## 7. Persona agents (hospital-sim-agents)
+
+Simulated patients and visitors (LLM minds on a stub sim, Isaac later). Every payload except `/clock` and
+`/agents/pending` is JSON in `std_msgs/String`. Full usage: `hospital-sim-agents/README.md`.
+
+| Topic | Type | Publisher → subscriber | Rate |
+|---|---|---|---|
+| `/clock` | `rosgraph_msgs/Clock` | stub sim → all nodes | 100 Hz wall |
+| `/humans/roster` | String (latched) | stub sim → agents, director | on change |
+| `/humans/<id>/status` | String | stub sim → agents, director | 10 Hz sim |
+| `/humans/<id>/observation` | String | stub sim → agents | 2 Hz sim, and at once on new audio |
+| `/humans/<id>/intent` | String | agents → stub sim | on decision |
+| `/humans/<id>/say` | String | agents → stub sim | on speech |
+| `/humans/<id>/nudge`, `/humans/<id>/reflex` | String | director → agents | on card |
+| `/sim/audio/events` | String | stub sim → (nodes named `wardzero_` only) | on sound |
+| `/sim/world_event` | String | director, replay → stub sim | on event |
+| `/scenario/timeline` | String | director → panel, stub sim | 1 Hz sim |
+| `/scenario/events` | String | director → panel | on event |
+| `/scenario/control` | String | panel/director → all | on action |
+| `/agents/pending` | `std_msgs/Int32` | agents → stub sim (lockstep) | on change, 1 Hz heartbeat |
+| `/g1/audio/heard` | String | stub sim → robot | on sound the robot hears |
+| `/g1/speech/say` | `std_msgs/String` | robot → stub sim | on speech |
+
+**Envelope (`wz.v1`).** Every JSON payload has `"schema": "wz.v1"`; unknown keys and other versions are rejected.
+
+**Fairness rule.** No node outside the `wardzero_` prefix may subscribe to `/humans/`, `/scenario/`,
+`/sim/audio/events`, `/sim/world_event` or `/agents/pending`. The robot hears only `/g1/audio/heard`, where `source_id` is always `unknown`. `hhumans audit` checks the live graph.
+
+**`/g1/speech/say` is now a sound source in the stub sim.** Plain text is spoken at 72 dB at 1 m and addressed to the
+nearest person within 2.5 m of the robot. The stub gives the robot no lidar or camera.

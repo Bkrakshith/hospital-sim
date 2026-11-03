@@ -26,3 +26,7 @@
 [submodule "hospital-sim-ui"]
 	path = hospital-sim-ui
 	url = https://github.com/Bkrakshith/hospital-sim-ui.git
+[submodule "hospital-sim-agents"]
+	path = hospital-sim-agents
+	url = https://github.com/Bkrakshith/hospital-sim-agents.git
+	branch = v3
