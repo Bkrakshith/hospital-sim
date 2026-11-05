@@ -12,3 +12,5 @@ documentation, in the credits of your product, and in your source distribution:
     Based on hospital-sim by Bkrakshith (https://github.com/Bkrakshith/hospital-sim)
 
 If you use this work in a publication, cite it with the details in CITATION.cff.
+
+Voice credits (hospital-sim-agents, spoken voices in recorded runs): see hospital-sim-agents/NOTICE.

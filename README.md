@@ -39,7 +39,7 @@ Built by Rakshith Bangalore Kumaraswamy.
 |---|---|---|
 | 1.0 | `main`, tag `v1.0` | The original hospital and surgical wing. Doorways are open gaps. |
 | 2.0 | `v2` | The hospital is closer to UK guidance. It adds fire doors, bed lifts, a re-planned ward and A&E, and a wider link corridor. |
-| 3.0 | `v3` | Version 2 and simulated people: patients and visitors with AI minds, memory and reflexes, in a waiting area beside the robot. |
+| 3.0 | `v3` | Version 2, simulated people with AI minds and memory, and the Scenario Studio to test your own robot against them. |
 
 Version 2 adds:
 
@@ -63,33 +63,27 @@ git clone --recurse-submodules -b v2 https://github.com/Bkrakshith/hospital-sim.
 vcs import < hospital-sim.repos   # on the v2 branch, the changed repos point to their v2 branches
 ```
 
-Version 3 adds simulated people (new repository [hospital-sim-agents](https://github.com/Bkrakshith/hospital-sim-agents)):
+Version 3 adds simulated people and the Scenario Studio (repository
+[hospital-sim-agents](https://github.com/Bkrakshith/hospital-sim-agents)). Use it to test your own robot against
+patients, visitors and staff before a real trial:
 
-- Five people in the main-entrance waiting area: two patients with a cough (one older and breathless), the
-  companion of the older patient, an older patient with a stick who is hard of hearing, and an anxious
-  first-time patient. During the scene, a visitor arrives and asks the way to the ward.
-- Each person has a mind, reflexes and a body. The mind is a LangGraph agent on Claude or OpenAI.
-  It reads the signs, hears the robot and other people, and decides what to do next. The reflexes
-  (cough, fidget, turn to a voice) run with no AI.
-- Memory for each person: short-term memory for the current run, and long-term memory that carries
-  across runs. A command resets the memory, and snapshots let you restore it.
-- A small knowledge base made from the project research notes. It gives the people realistic behaviour.
-- A storyboard that starts when the scene starts, and a browser control panel that sends scenario cards
-  (for example "ask the robot the way to the toilet") to test how the robot responds.
-- A fairness rule: the robot gets only what a real robot can sense. It cannot read the people's minds
-  or the scenario topics. `hhumans audit` checks the live ROS 2 graph.
-- A recording of each run, and three ways to replay or run it again.
-- Each user uses their own Claude or OpenAI account. The keys stay in the system keyring and never go
-  into logs, topics or git. The system does not run without a key.
+- Each person is run by an AI model (Claude or OpenAI), with a role, a mood and a memory. They ask the robot for
+  help, get impatient when it does not help, and tell each other how it went (word of mouth).
+- The Studio is a browser tool with four pages: Scene (pick a scenario and its people), Robot (bring your URDF,
+  sensors and ROS 2 controller, or use the built-in Unitree G1), Run (Quick 2D or Isaac Sim, with a spending limit)
+  and Report (pass or fail against the scenario's success criteria, near misses, contacts, mood changes and
+  suggestions).
+- Ready-made scenarios include reception and guide, the A&E waiting room, a night call bell, a wandering patient,
+  a ward fire and a fire evacuation.
+- Memory can carry between repeat runs, so a robot that let someone down starts the next run with less trust.
+- The robot gets only what a real robot can sense. It cannot read the people's minds or the scenario.
+- Each user uses their own API key, kept in the system keyring. A free test mode needs no key.
 
-In version 3, the people move in a stand-in 2D simulator. Their bodies in Isaac Sim come next. The design
-is in [docs/design/](docs/design/), and the product requirements and roadmap are in
-[docs/product/human-persona-agents-prd.html](docs/product/human-persona-agents-prd.html).
-
-To get version 3:
+To get version 3 and test your robot, follow the
+[quick start in hospital-sim-agents](https://github.com/Bkrakshith/hospital-sim-agents#quick-start). It starts with:
 
 ```bash
-git clone --recurse-submodules -b v3 https://github.com/Bkrakshith/hospital-sim.git
+git clone --recurse-submodules -b v3 https://github.com/Bkrakshith/hospital-sim.git WardZero
 ```
 
 ## What you can do with WardZero
