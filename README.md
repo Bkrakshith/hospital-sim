@@ -40,6 +40,7 @@ Built by Rakshith Bangalore Kumaraswamy.
 | 1.0 | `main`, tag `v1.0` | The original hospital and surgical wing. Doorways are open gaps. |
 | 2.0 | `v2` | The hospital is closer to UK guidance. It adds fire doors, bed lifts, a re-planned ward and A&E, and a wider link corridor. |
 | 3.0 | `v3` | Version 2, simulated people with AI minds and memory, and the Scenario Studio to test your own robot against them. |
+| 3.1 | `v3.1` | Version 3, with a walking G1 (NVIDIA GEAR-SONIC) that guides people, physics doors, a receptionist, and placement and forbidden areas in the Studio. |
 
 Version 2 adds:
 
@@ -79,11 +80,24 @@ patients, visitors and staff before a real trial:
 - The robot gets only what a real robot can sense. It cannot read the people's minds or the scenario.
 - Each user uses their own API key, kept in the system keyring. A free test mode needs no key.
 
-To get version 3 and test your robot, follow the
+Version 3.1 makes the built-in G1 walk in Isaac Sim, so the demo scenarios can be passed end to end:
+
+- NVIDIA's GEAR-SONIC whole-body controller drives the G1 along its route. The weights are downloaded separately
+  (`scripts/fetch_sonic.py` in hospital-sim-agents, NVIDIA Open Model License) and are not in any repository.
+- The robot can walk a person to the room they ask for, and walk over to tell the receptionist about a person who
+  needs staff.
+- Hinged doors swing open by physics for people and the robot, and a closer shuts them.
+- Reception scenes add a live receptionist at the desk, who can be removed from the cast.
+- In the Studio, people and the robot can be dragged on the map, people can start seated, and the user can draw
+  forbidden areas that the robot must keep out of.
+
+A demo video is on the [project page](https://bkrakshith.github.io/wardzero/#v31).
+
+To get version 3.1 and test your robot, follow the
 [quick start in hospital-sim-agents](https://github.com/Bkrakshith/hospital-sim-agents#quick-start). It starts with:
 
 ```bash
-git clone --recurse-submodules -b v3 https://github.com/Bkrakshith/hospital-sim.git WardZero
+git clone --recurse-submodules -b v3.1 https://github.com/Bkrakshith/hospital-sim.git WardZero
 ```
 
 ## What you can do with WardZero
