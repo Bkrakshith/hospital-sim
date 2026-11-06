@@ -21,8 +21,6 @@ flowchart LR
   %% ---------------- people and devices ----------------
   subgraph DEV["People and devices"]
     direction TB
-    IPAD["iPad controller app<br/>PWA · Clinical / Operator / Technician<br/>Stop · Power off · readback + undo"]
-    CONSOLE["Engineering console<br/>browser /console"]
     KB["Keyboard teleop<br/>g1_teleop_keyboard"]
     CAM["OBSBOT Tiny 3 webcam<br/>seated operator"]
     ESTOP["Hardware wireless e-stop<br/>latching, mandatory"]
@@ -31,7 +29,6 @@ flowchart LR
   %% ---------------- hospital workstation ----------------
   subgraph WS["Hospital-network workstation · ROS 2 Humble · CycloneDDS"]
     direction TB
-    UISRV["hospital-sim-ui/server · aiohttp + rclpy<br/>HTTPS/WSS :8443<br/>auth + roles · control lease · alarms<br/>audit log · incidents · 3 s undo"]
     subgraph TELE["Teleoperation"]
       direction TB
       WEBTEL["webcam teleop · xr_teleoperate fork<br/>MediaPipe pose + hands · IK pinocchio<br/>BrainCo retarget · OBSBOT auto-framing"]
@@ -80,19 +77,12 @@ flowchart LR
   end
 
   %% ---------- device links ----------
-  IPAD -- "WSS JSON protocol v2.1" --> UISRV
-  CONSOLE -- "WSS" --> UISRV
   KB -- "g1/teleop/key" --> MGR
   CAM -- "USB UVC video + PTZ" --> WEBTEL
   ESTOP -- "g1/estop/heartbeat" --> MGR
 
   %% ---------- workstation links ----------
-  UISRV -- "teleop/key_ui · ui/heartbeat<br/>set_mode · control/lease" --> MGR
-  UISRV -- "mission/command<br/>request_instrument" --> MISSION
-  UISRV -- "start stop SLAM + Nav2<br/>maps · goals" --> NAV
-  MGR -- "g1/mode · lease_state" --> UISRV
   WEBTEL -- "teleop/upper_body_target_raw<br/>teleop/hand cmd_raw" --> MGR
-  WEBTEL -- "annotated camera JPEG<br/>tracking_status" --> UISRV
   MISSION -- "NavigateToPose action" --> NAV2
   MISSION -- "auto/upper_body_target<br/>auto/hand cmd" --> MGR
   MISSION -- "instruction + start stop" --> WLAB
@@ -171,7 +161,7 @@ stateDiagram-v2
   MANIP --> STAND: n · stop, arms blend back
   STAND --> NAV: g · Nav2 drives
   NAV --> STAND: p
-  STAND --> AUTO: mission or iPad · WLA / skills drive
+  STAND --> AUTO: mission · WLA / skills drive
   AUTO --> STAND: p · operator takes over
   LOCO --> HOLD: Stop
   MANIP --> HOLD: Stop
@@ -184,7 +174,7 @@ stateDiagram-v2
   note right of HOLD
     Stop = hold still, arms frozen.
     Also entered by the 1 s watchdog
-    when the controlling iPad goes silent.
+    when the controlling client goes silent.
   end note
 ```
 
@@ -193,9 +183,6 @@ stateDiagram-v2
 ```mermaid
 sequenceDiagram
   autonumber
-  actor Nurse as Circulating nurse
-  participant App as iPad app
-  participant UI as hospital-sim-ui/server
   participant M as g1_mission
   participant Nav as Nav2
   participant B as wla_bridge
@@ -204,11 +191,6 @@ sequenceDiagram
   participant C as g1_controller
   participant R as G1 robot
 
-  Nurse->>App: Request instrument · Needle driver for surgeon
-  App->>UI: instrument_request
-  UI-->>App: readback card + 3 s undo
-  UI->>R: speech · "Needle driver to surgeon, handle first"
-  UI->>M: request_instrument after undo window
   M->>Mgr: set_mode AUTO
   M->>Nav: NavigateToPose · theatre_instrument_table
   Nav->>Mgr: cmd_vel_nav 20 Hz
@@ -227,12 +209,8 @@ sequenceDiagram
   M->>B: instruction · "hand the needle driver to the surgeon, handle first"
   Note over B,S: same loop, with the surgeon's hand position from perception
   B-->>M: released
-  M->>UI: status · handed, count updated
-  UI-->>App: handed list + time
   opt Stop at any moment
-    Nurse->>App: Stop
-    App->>UI: stop
-    UI->>Mgr: HOLD
+    Note over Mgr: Stop from any source · mode HOLD
     Mgr->>C: freeze arms, zero velocity
     Mgr-->>M: paused, resumable
   end

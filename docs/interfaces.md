@@ -25,7 +25,6 @@ topics as the real robot, so the stack can later point at the real G1).
 | `ros2_ws/src/hospital-sim-ros2/` | hospital-sim-ros2 | ROS 2 Humble packages (section 3); `ros2_ws/` itself is the colcon workspace and stays in the master repository |
 | `g1-webcam-teleop/xr_teleoperate/` | g1-webcam-teleop | fork of unitreerobotics/xr_teleoperate with webcam hand/arm tracking input |
 | `g1-webcam-teleop/obsbot/` | g1-webcam-teleop | OBSBOT Tiny 3 gimbal control + hand-following auto-framing |
-| `hospital-sim-ui/` | hospital-sim-ui | web dashboard (SLAM, navigation, teleoperation) |
 | (not in this assembly) | private | instrument detector training. The stack does not depend on it: `g1_perception` runs in `gt` mode in simulation and takes any YOLO-OBB ONNX export through its `model` parameter |
 | `docs/` | hospital-sim (master) | design docs, this contract |
 | `env.sh` | hospital-sim (master) | `source env.sh` = clean LD path + ROS 2 Humble + `.venv` + ros2_ws overlay |
@@ -34,7 +33,7 @@ topics as the real robot, so the stack can later point at the real G1).
 
 Python environments:
 - `.venv/` (system python 3.10, `--system-site-packages`, so rclpy works): all ROS 2 nodes,
-  teleop, UI server. Install with `.venv/bin/pip`. Always `source env.sh` first (conda's
+  teleop. Install with `.venv/bin/pip`. Always `source env.sh` first (conda's
   `LD_LIBRARY_PATH` breaks rclpy otherwise).
 - `g1-whole-body-rl/` uses its own conda env `g1-mjx` (JAX/MJX); never mix it into `.venv`.
 - Isaac uses `~/isaacsim` python.
@@ -73,7 +72,7 @@ Commands are **normalised 0 (open) .. 1 (closed)**.
 | `g1_teleop_manager` | mode FSM + command arbiter (the only thing that decides who drives the robot); control lease, UI heartbeat watchdog, hardware e-stop interlock, speed zones (3.4) |
 | `g1_teleop_keyboard` | terminal keyboard node → `/g1/teleop/key`, `/g1/cmd_vel_teleop` |
 | `g1_navigation` | slam_toolbox + Nav2 config and launches for the G1 |
-| `g1_bringup` | top-level launches: `sim.launch.py`, `teleop.launch.py`, `slam.launch.py`, `nav.launch.py`, `dashboard.launch.py`, `all.launch.py` |
+| `g1_bringup` | top-level launches: `sim.launch.py`, `teleop.launch.py`, `slam.launch.py`, `nav.launch.py`, `all.launch.py` |
 
 ### 3.1 Topics
 
@@ -96,7 +95,7 @@ Teleop and arbitration:
 | Topic | Type | Pub → Sub |
 |---|---|---|
 | `/g1/teleop/key` | `std_msgs/String` (one key per msg, lower-case) | keyboard node → manager (identity `keyboard`); camera teleop node keys c f h u |
-| `/g1/teleop/key_ui` | `std_msgs/String` JSON `{"key","holder"}` | UI server → manager (manager keys with the device identity `ui:<device_id>`) |
+| `/g1/teleop/key_ui` | `std_msgs/String` JSON `{"key","holder"}` | remote client → manager (manager keys with the device identity `ui:<device_id>`) |
 | `/g1/cmd_vel_teleop` | `geometry_msgs/Twist` | keyboard node, UI → manager |
 | `/g1/cmd_vel_nav` | `geometry_msgs/Twist` | Nav2 (remapped from `cmd_vel`) → manager |
 | `/g1/teleop/upper_body_target_raw` | `sensor_msgs/JointState` | camera teleop (xr fork) → manager; names = waist + 14 arm joints |
@@ -188,21 +187,21 @@ LOCO→MANIP directly is **rejected**: the operator must pause locomotion first.
 Leaving MANIP blends arms back to the default pose over ~1 s before STAND reports ready.
 Fall detected by the controller → DAMP (source `safety`).
 
-**HOLD ("Stop", added 2026-09-30, docs/ui/README.md decision 1).** Any mode except DAMP → HOLD, from any source, also
+**HOLD ("Stop", added 2026-09-30).** Any mode except DAMP → HOLD, from any source, also
 during an arm blend (the blend stops where it is). In HOLD the manager forwards nothing (`fsm.FORWARD`): cmd_vel 0,
 no arm or hand targets. The controller keeps the policy balancing and freezes the upper body at the **measured** pose
 at the moment HOLD arrives (joints whose command is moving: set-point = measured q + its low-passed static PD offset;
 joints whose command is still keep it; upper-body kd ×2.5 while held, so a moving arm brakes in ~0.3 s; measured
 drift 0.006-0.011 rad over 3 s after a stop at 0.17-0.26 rad/s, MuJoCo). Hands keep their
-last command. The mission pauses (resumable) and cancels its Nav2 goal; the UI server pauses its own Nav2 goal. Leaving
+last command. The mission pauses (resumable) and cancels its Nav2 goal. Leaving
 HOLD only by an explicit resume: HOLD → STAND (arms blend from the frozen pose to default over `hold_blend_time`
 2.5 s, skipped when already within 0.05 rad) or HOLD → AUTO (only when the robot was in AUTO when stopped, source
 `mission`/`ui`: the paused mission continues). HOLD → DAMP always. HOLD → LOCO/MANIP/NAV is rejected. HOLD requested
 in DAMP is accepted as a no-op. Leaving HOLD any other way than → AUTO aborts a paused mission.
 Why a mode and not "STAND + detail": the arms-frozen / arms-at-default difference, the explicit-resume rule, the
-watchdog and the red "Stopped" state must be visible to the controller, the mission, every UI and the audit log from
+watchdog and the red "Stopped" state must be visible to the controller, the mission and every client from
 one field, and STAND must stay "safe to start a new motion from".
-DAMP stays as the "power off" control (the UI labels it "Power off robot: it will sink to the floor").
+DAMP stays as the "power off" control: the robot sinks to the floor.
 
 ### 3.3 Key bindings (defaults, in `g1_teleop_manager/config/keys.yaml`)
 
@@ -235,16 +234,16 @@ All in `g1_teleop_manager` (authoritative; pure logic in `safety.py`), config `k
 |---|---|---|
 | `/g1/control/lease` | `g1_interfaces/srv/ControlLease` (`op` acquire\|release\|steal\|renew\|query, `holder`, `role`, `display`, `reason` → `ok`, `message`, `holder`, `role`, `display`, `expires_in`) | one holder at a time; steal needs a reason; a steal while in LOCO/MANIP → HOLD (source `lease`) |
 | `/g1/control/lease_state` | `std_msgs/String` JSON, transient-local | `{holder, role, display, held_for, expires_in, implicit, reason, heartbeat}` |
-| `/g1/ui/heartbeat` | `std_msgs/String` JSON `{"holder","seq"}` | UI server → manager, ≥ 5 Hz for the lease holder; renews the lease |
+| `/g1/ui/heartbeat` | `std_msgs/String` JSON `{"holder","seq"}` | remote client → manager, ≥ 5 Hz for the lease holder; renews the lease |
 | `/g1/estop/heartbeat` | `std_msgs/Bool`, 10 Hz | hardware wireless e-stop receiver: `true` = released/healthy, `false` = pressed. Sim/mock stub in `g1_mujoco_sim/stubs.py` (`/sim/estop` SetBool presses it, `/sim/estop_link` kills it) |
-| `/g1/indicator/light` | `std_msgs/String` JSON `{"colour","pattern"}` (latched) | UI server → robot light: red flash_2hz (High alarm), amber pulse_0.6hz (Medium), cyan steady (Low), else by mode (red steady HOLD, magenta LOCO/MANIP, blue NAV/AUTO, white STAND, off DAMP). Sim: log-only stub |
-| `/g1/speech/say` | `std_msgs/String` | UI server → robot speaker (readbacks, "Stopped", alarms). Sim: log-only stub |
+| `/g1/indicator/light` | `std_msgs/String` JSON `{"colour","pattern"}` (latched) | remote client → robot light: red flash_2hz (High alarm), amber pulse_0.6hz (Medium), cyan steady (Low), else by mode (red steady HOLD, magenta LOCO/MANIP, blue NAV/AUTO, white STAND, off DAMP). Sim: log-only stub |
+| `/g1/speech/say` | `std_msgs/String` | remote client → robot speaker ("Stopped", alarms). Sim: log-only stub |
 
 Rules:
 - **Lease.** While a lease is held only its holder may enter LOCO/MANIP/NAV (SetMode source `ui:<device_id>` or
   `keyboard`) or send velocity keys; `mission` (the robot's own executive) and the safety sources are not gated.
   Stop (HOLD) and power off (DAMP) are accepted from everyone. Entering LOCO/MANIP with the lease free takes an
-  **implicit** lease for the requester (terminal keyboard, v1 console), dropped when manual motion ends. Leases lapse
+  **implicit** lease for the requester (for example the terminal keyboard), dropped when manual motion ends. Leases lapse
   after `lease_ttl` 30 s without heartbeat/renew.
 - **Watchdog.** In LOCO/MANIP, if the holder is a UI device (`ui:*`) and its `/g1/ui/heartbeat` is older than
   `heartbeat_timeout` 1.0 s → HOLD (source `watchdog`). Measured trip 0.92 s (sim). The terminal keyboard is exempt.
@@ -252,7 +251,7 @@ Rules:
   ("motion locked"); pressed → HOLD (source `estop_hw`), resume refused until released; heartbeat lost while moving →
   HOLD. DAMP → STAND stays allowed. DEV override: node param `DEV_ONLY_ignore_estop_heartbeat:=true` (reported as
   `estop.dev_override` in manager_status and shown by the UI).
-- **Arms hold inside MANIP.** `/g1/teleop/arms_hold` (String JSON `{"on","holder"}`, UI server → manager; lease
+- **Arms hold inside MANIP.** `/g1/teleop/arms_hold` (String JSON `{"on","holder"}`, remote client → manager; lease
   rule): the manager stops forwarding the camera-teleop arm/hand streams and publishes `/g1/arms_hold` (Bool,
   transient-local) → the controller freezes the arms exactly as in HOLD while the mode stays MANIP. Cleared by any mode
   change. `manager_status.arms_hold`.
@@ -281,8 +280,7 @@ trained policy exists it runs a **placeholder**: Unitree's pre-trained G1 12-DoF
 
 | Port | Service |
 |---|---|
-| 8443 | UI server HTTPS + WSS: iPad app at `/`, engineering console at `/console/` (hospital-sim-ui/PROTOCOL.md v2) |
-| 8080 | UI server plain HTTP, bound to 127.0.0.1 when TLS is set up (localhost development) |
+| 8600 | UnifoLM-WLA model server, websocket + msgpack (planned) |
 
 ## 6. Autonomy: missions, skills, perception (added 2026-09-30)
 
@@ -312,8 +310,7 @@ Mission interfaces (`g1_interfaces`):
 Mission and HOLD: AUTO → HOLD pauses the mission (skills frozen, Nav2 goal cancelled, `paused_by_hold`); `resume`
 on `/g1/mission/command` then requests HOLD → AUTO and continues; leaving HOLD to STAND/DAMP aborts it.
 
-Named locations: `ros2_ws/src/hospital-sim-ros2/g1_mission/config/locations.yaml` (map frame; display names, icons and allowed roles in
-`hospital-sim-ui/server/config/places.yaml`): `theatre_instrument_table`,
+Named locations: `ros2_ws/src/hospital-sim-ros2/g1_mission/config/locations.yaml` (map frame): `theatre_instrument_table`,
 `theatre_surgeon_side`, `sterile_store`, `corridor_west`, …
 Instrument set (step 1): whatever meshes exist (i4h AngledTweezers, PneumoperitoneumNeedle, Trocar, scissors
 from the i4h scissor workflow) + clearly-labelled procedural stand-ins (scalpel handle, forceps, needle driver)
