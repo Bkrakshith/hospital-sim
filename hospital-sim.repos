@@ -31,7 +31,3 @@ repositories:
     type: git
     url: https://github.com/Bkrakshith/g1-webcam-teleop.git
     version: main
-  hospital-sim-ui:
-    type: git
-    url: https://github.com/Bkrakshith/hospital-sim-ui.git
-    version: main

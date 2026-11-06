@@ -23,6 +23,3 @@
 [submodule "g1-webcam-teleop"]
 	path = g1-webcam-teleop
 	url = https://github.com/Bkrakshith/g1-webcam-teleop.git
-[submodule "hospital-sim-ui"]
-	path = hospital-sim-ui
-	url = https://github.com/Bkrakshith/hospital-sim-ui.git
