@@ -30,5 +30,4 @@ Open work, newest decisions first. Each training item needs the user's go-ahead 
 
 - [ ] Wrist cameras on the G1 (UnifoLM-WLA and most VLA data use head + two wrist cameras)
 - [ ] Hardware wireless e-stop, robot light and speaker (sim stubs today)
-- [ ] Test the iPad app on a real iPad (gloves, VoiceOver, silent switch)
 - [ ] Confirm on the real hand: BrainCo thumb motor order (docs vs xr_teleoperate)
