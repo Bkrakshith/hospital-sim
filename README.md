@@ -1,4 +1,6 @@
-# WardZero: the simulated hospital where robots train before they meet patients
+# WardZero
+
+The simulated hospital where robots train before they meet patients. [Project page](https://bkrakshith.github.io/wardzero/).
 
 <p align="center">
   <img src="docs/images/isaac_walk.gif" alt="A Unitree G1 humanoid robot walks along a hospital corridor in Isaac Sim" width="760">
