@@ -13,9 +13,6 @@
 	path = g1-isaac-sim
 	url = https://github.com/Bkrakshith/g1-isaac-sim.git
 	branch = v2
-[submodule "g1-whole-body-rl"]
-	path = g1-whole-body-rl
-	url = https://github.com/Bkrakshith/g1-whole-body-rl.git
 [submodule "ros2_ws/src/hospital-sim-ros2"]
 	path = ros2_ws/src/hospital-sim-ros2
 	url = https://github.com/Bkrakshith/hospital-sim-ros2.git

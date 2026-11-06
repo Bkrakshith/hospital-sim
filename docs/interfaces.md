@@ -19,7 +19,6 @@ topics as the real robot, so the stack can later point at the real G1).
 | `hospital-sim-env/isaac/` | hospital-sim-env | Isaac Sim hospital scene: `scene/` (generator, `layout.py`), `usd/` (`hospital_g1.usd`), `assets/`, `renders/`, `launch_isaac.sh`, `i4h_env.sh`. Moved here from the repo root on 2026-09-30 (as `sim/isaac/hospital/`); other components reference it by these paths |
 | `hospital-sim-env/objects/` | hospital-sim-env | surgical instruments (meshes, MJCF, USD), `placements.yaml`, `catalog.json` (section 6) |
 | `g1-brainco-description/` | g1-brainco-description | canonical G1 29-DoF rev 1.0 + BrainCo Revo2 model: URDF, MJCF, meshes, `SOURCE.md`, build script |
-| `g1-whole-body-rl/` | g1-whole-body-rl | MuJoCo / MJX ULTRA-style whole-body controller: envs, configs, training, export (**no training runs yet**) |
 | `g1-mujoco-sim/` | g1-mujoco-sim | MuJoCo hospital world generated from `hospital-sim-env/isaac/scene/layout.py`, scene MJCF with the G1 |
 | `g1-isaac-sim/` | g1-isaac-sim | G1 placed in the Isaac hospital + Isaac ROS 2 bridge speaking this contract |
 | `ros2_ws/src/hospital-sim-ros2/` | hospital-sim-ros2 | ROS 2 Humble packages (section 3); `ros2_ws/` itself is the colcon workspace and stays in the master repository |
@@ -35,7 +34,6 @@ Python environments:
 - `.venv/` (system python 3.10, `--system-site-packages`, so rclpy works): all ROS 2 nodes,
   teleop. Install with `.venv/bin/pip`. Always `source env.sh` first (conda's
   `LD_LIBRARY_PATH` breaks rclpy otherwise).
-- `g1-whole-body-rl/` uses its own conda env `g1-mjx` (JAX/MJX); never mix it into `.venv`.
 - Isaac uses `~/isaacsim` python.
 
 GPU memory: when JAX tests and Isaac Sim share one GPU, set `XLA_PYTHON_CLIENT_MEM_FRACTION=0.35` for
@@ -261,9 +259,10 @@ Rules:
 - **Speed zones.** `zones.yaml`: polygons in the map frame with `max_speed`; the planar speed of `/g1/cmd_vel` is
   scaled down to the cap while TF map→pelvis is inside (first match); `manual_cap` applies in LOCO everywhere.
 
-## 4. Policy artefacts (`g1-whole-body-rl/` → `g1_controller`)
+## 4. Policy artefacts (→ `g1_controller`)
 
-`g1-whole-body-rl/exports/<policy_name>/policy.onnx` + `policy.json` sidecar:
+A policy is a folder with `policy.onnx` and a `policy.json` sidecar, given to `g1_controller` by path or as
+`g1_controller/policies/<name>`:
 ```json
 { "name": "...", "control_dt": 0.02, "sim_dt": 0.002,
   "joint_names": [29 names in section 2 order], "controlled_joints": [indices the policy outputs],

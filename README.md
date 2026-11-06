@@ -200,10 +200,7 @@ ros2 launch g1_bringup sim.launch.py
 6. Optional: install Isaac Sim 6.0 and the NVIDIA asset packs. Then connect the assets to the hospital
    scene. The [hospital-sim-env README](hospital-sim-env/README.md) gives the procedure.
 
-7. Optional: make the conda environment for controller training. The
-   [g1-whole-body-rl README](g1-whole-body-rl/README.md) gives the procedure.
-
-8. Optional: install the pinocchio wheels for webcam teleoperation. The
+7. Optional: install the pinocchio wheels for webcam teleoperation. The
    [g1-webcam-teleop README](g1-webcam-teleop/README.md) gives the procedure.
 
 To follow the main branch of each component instead of the tested versions, use vcstool:
@@ -302,12 +299,15 @@ The table below lists the repositories.
 | `g1-brainco-description/` | [g1-brainco-description](https://github.com/Bkrakshith/g1-brainco-description) | The G1 with BrainCo hands: URDF, MJCF, meshes, robot specification, build and check scripts |
 | `g1-mujoco-sim/` | [g1-mujoco-sim](https://github.com/Bkrakshith/g1-mujoco-sim) | The MuJoCo hospital world with the G1 in it |
 | `g1-isaac-sim/` | [g1-isaac-sim](https://github.com/Bkrakshith/g1-isaac-sim) | The G1 in the Isaac Sim hospital: physics, lidar, cameras, DDS and ROS 2 bridge |
-| `g1-whole-body-rl/` | [g1-whole-body-rl](https://github.com/Bkrakshith/g1-whole-body-rl) | Whole-body controller training in MuJoCo MJX and the ONNX export |
 | `ros2_ws/src/hospital-sim-ros2/` | [hospital-sim-ros2](https://github.com/Bkrakshith/hospital-sim-ros2) | The ROS 2 Humble packages: interfaces, controller, mode manager, teleoperation, simulator node, navigation, task layer, bringup |
 | `g1-webcam-teleop/` | [g1-webcam-teleop](https://github.com/Bkrakshith/g1-webcam-teleop) | Webcam teleoperation of the arms and hands |
 | `hospital-sim-agents/` | [hospital-sim-agents](https://github.com/Bkrakshith/hospital-sim-agents) | Simulated people: AI minds, memory, reflexes, storyboard, scenario control panel, run recording (version 3) |
 | `docs/` | this repository | The interface contract and the system architecture |
 | `datasets/` | Hugging Face | Recorded data. It is not in git. See [datasets/README.md](datasets/README.md). |
+
+The controller-training repository g1-whole-body-rl is archived. WardZero's walking G1 uses NVIDIA GEAR-SONIC,
+which `hospital-sim-agents/scripts/fetch_sonic.py` downloads. To train your own whole-body controller, use
+[GR00T-WholeBodyControl](https://github.com/NVlabs/GR00T-WholeBodyControl).
 
 The folder `ros2_ws/` is the colcon workspace. The build makes the folders `build/`, `install/` and `log/` in it.
 
@@ -323,7 +323,6 @@ The table below lists the system software and the components that use it.
 | colcon | any recent version | the build of `ros2_ws` |
 | vcstool | 0.3.0 or later | the checkout of the component repositories |
 | uv | 0.12 or later | the USD scripts (`usd-core`) and the object generator |
-| conda (Miniconda) | any recent version | the training environments of g1-whole-body-rl |
 | Isaac Sim | 6.0 | hospital-sim-env scene work and g1-isaac-sim |
 | ffmpeg | any version | videos from recordings |
 
@@ -345,8 +344,6 @@ The table below lists the Python environments.
 | Environment | Used by | Notes |
 |---|---|---|
 | `.venv/` | ROS 2 nodes, teleoperation, objects, robot checks, MuJoCo | System Python 3.10 with system site-packages. Install packages with `.venv/bin/pip`. |
-| conda `g1-mjx` | g1-whole-body-rl | JAX and MJX, MuJoCo 3.10. Do not install these packages into `.venv`. |
-| conda `ultra-sim2sim` | g1-whole-body-rl/ultra_eval | The released ULTRA teacher policy, for comparison |
 | Isaac Sim Python | g1-isaac-sim, hospital-sim-env/isaac | Isaac Sim 6.0, Python 3.12 |
 
 ## Add your own robot

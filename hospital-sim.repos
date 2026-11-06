@@ -19,10 +19,6 @@ repositories:
     type: git
     url: https://github.com/Bkrakshith/g1-isaac-sim.git
     version: v2
-  g1-whole-body-rl:
-    type: git
-    url: https://github.com/Bkrakshith/g1-whole-body-rl.git
-    version: main
   ros2_ws/src/hospital-sim-ros2:
     type: git
     url: https://github.com/Bkrakshith/hospital-sim-ros2.git

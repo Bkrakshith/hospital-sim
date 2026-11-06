@@ -128,7 +128,7 @@ flowchart TB
     A1["ACT or Diffusion Policy<br/>imitation-learned skill"]:::planned
   end
   L3["Mode manager · g1_teleop_manager<br/>picks the one source for the current mode<br/>Stop = HOLD and Power off = DAMP always win<br/>watchdog 1 s · speed zones · control lease"]
-  L2["Whole-body policy · g1_controller · 50 Hz<br/>student RL policy ONNX, from g1-whole-body-rl/<br/>input cmd_vel, height, upper-body targets, IMU, joints<br/>output 29 joint position targets"]
+  L2["Whole-body policy · g1_controller · 50 Hz<br/>policy ONNX + sidecar, Unitree placeholder today<br/>input cmd_vel, height, upper-body targets, IMU, joints<br/>output 29 joint position targets"]
   L1["Motor layer · 500 Hz<br/>PD torque in Unitree motor drivers<br/>lowcmd, lowstate over DDS"]
   L0["G1 29-DoF + BrainCo Revo2 hands<br/>or MuJoCo / Isaac"]
 
@@ -220,7 +220,7 @@ sequenceDiagram
 
 ```mermaid
 flowchart LR
-  subgraph RL["Balance policy · reinforcement learning · g1-whole-body-rl/"]
+  subgraph RL["Balance policy · reinforcement learning · not pursued: train with GR00T-WholeBodyControl"]
     direction TB
     MJX["MuJoCo MJX · 2048 envs<br/>G1 + BrainCo model, 35 N·m"]
     TEA["PPO teacher · privileged<br/>Stage A stand · Stage B loco + arm targets"]
