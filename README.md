@@ -37,10 +37,10 @@ Built by Rakshith Bangalore Kumaraswamy.
 
 | Version | Branch / tag | Contents |
 |---|---|---|
-| 1.0 | `main`, tag `v1.0` | The original hospital and surgical wing. Doorways are open gaps. |
+| 1.0 | tag `v1.0` | The original hospital and surgical wing. Doorways are open gaps. |
 | 2.0 | `v2` | The hospital is closer to UK guidance. It adds fire doors, bed lifts, a re-planned ward and A&E, and a wider link corridor. |
 | 3.0 | `v3` | Version 2, simulated people with AI minds and memory, and the Scenario Studio to test your own robot against them. |
-| 3.1 | `v3.1` | Version 3, with a walking G1 (NVIDIA GEAR-SONIC) that guides people, physics doors, a receptionist, and placement and forbidden areas in the Studio. |
+| 3.1 | `main`, `v3.1` | Version 3, with a walking G1 (NVIDIA GEAR-SONIC) that guides people, physics doors, a receptionist, and placement and forbidden areas in the Studio. |
 
 Version 2 adds:
 
